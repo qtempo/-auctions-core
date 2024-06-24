@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "prepare": "husky",
     "test": "tsx --test $(find src -type f -name '*.spec.ts')"
   },
   "devDependencies": {
