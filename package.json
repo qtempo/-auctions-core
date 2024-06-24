@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "test": "tsx --test $(find src -type f -name '*.spec.ts')"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.8",
+    "tsx": "^4.15.7",
+    "typescript": "^5.4.3"
+  }
+}
