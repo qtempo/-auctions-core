@@ -1,18 +1,21 @@
-export const auctionStatuses = ['OPEN', 'CLOSED'] as const;
+import { UUID } from 'node:crypto'
 
-export type SellerEmail = string;
-export type BidderEmail = string;
+export const auctionStatuses = ['OPEN', 'CLOSED'] as const
+
+export type AuctionID = UUID
+export type AuctionSellerEmail = string
+export type AuctionBidderEmail = string
 
 export interface Auction {
-  id: string;
-  title: string;
-  status: (typeof auctionStatuses)[number];
-  createdAt: string;
-  endingAt: string;
+  id: AuctionID
+  title: string
+  status: (typeof auctionStatuses)[number]
+  createdAt: string
+  endingAt: string
   highestBid: {
-    amount: number;
-    bidder: BidderEmail;
-  };
-  seller: SellerEmail;
-  pictureUrl: string;
+    amount: number
+    bidder: AuctionBidderEmail
+  }
+  seller: AuctionSellerEmail
+  pictureUrl: string
 }

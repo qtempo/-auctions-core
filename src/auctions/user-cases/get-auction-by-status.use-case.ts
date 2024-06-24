@@ -8,7 +8,7 @@ export class GetAuctionByStatusUseCase implements UseCase<Auction['status'], Pro
   constructor(private readonly getByStatusPort: GetAuctionByStatusPort) {}
 
   public async execute(status: Auction['status']) {
-    ok(auctionStatuses.includes(status), new AuctionsAppError(`"status" not supported, can't perfome get`))
+    ok(auctionStatuses.includes(status), new AuctionsAppError(`"status" not supported, can't perform get`))
     return await this.getByStatusPort.get(status)
   }
 }
