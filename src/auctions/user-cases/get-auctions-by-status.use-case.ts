@@ -4,7 +4,7 @@ import { Auction, auctionStatuses } from '../entities/Auction'
 import { AuctionsAppError } from '../../core/auctions-app.error'
 import { GetAuctionByStatusPort } from '../ports/get-auction-by-status.port'
 
-export class GetAuctionByStatusUseCase implements UseCase<Auction['status'], Promise<Auction[]>> {
+export class GetAuctionsByStatusUseCase implements UseCase<Auction['status'], Auction[]> {
   constructor(private readonly getByStatusPort: GetAuctionByStatusPort) {}
 
   public async execute(status: Auction['status']) {
