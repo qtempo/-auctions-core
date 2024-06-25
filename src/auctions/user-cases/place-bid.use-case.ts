@@ -1,14 +1,18 @@
 import { ok } from 'node:assert'
 import { UseCase } from '../../core/base.use-case'
-import { PlaceBidPort, PlaceBidType } from '../ports/place-bid.port'
-import { Auction } from '../entities/Auction'
+import { PlaceBidPort } from '../ports/place-bid.port'
+import { Auction, AuctionID } from '../domain/Auction'
 import { PlaceBidError } from '../errors/place-bid.error'
 
-export class PlaceBidUseCase implements UseCase<PlaceBidType, Auction> {
+export type PlaceBidRequest = Auction['highestBid'] & {
+  id: AuctionID
+}
+
+export class PlaceBidUseCase implements UseCase<PlaceBidRequest, Auction> {
   constructor(private readonly placeBidPort: PlaceBidPort) {}
 
-  public async execute(args: PlaceBidType) {
-    const { id, bidder, amount } = args
+  public async execute(request: PlaceBidRequest) {
+    const { id, bidder, amount } = request
     ok(id, new PlaceBidError(`"id" is missing`))
     const auction = await this.placeBidPort.get(id)
 
@@ -17,6 +21,6 @@ export class PlaceBidUseCase implements UseCase<PlaceBidType, Auction> {
     ok(bidder !== auction.seller, new PlaceBidError(`Can't bid on your own auctions!`))
     ok(bidder !== auction.highestBid.bidder, new PlaceBidError(`You are already the highest bidder!`))
 
-    return await this.placeBidPort.placeBid(args)
+    return await this.placeBidPort.placeBid(request)
   }
 }

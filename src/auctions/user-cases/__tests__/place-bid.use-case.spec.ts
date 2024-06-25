@@ -8,7 +8,7 @@ import { PlaceBidError } from '../../errors/place-bid.error'
 describe('place-bid.use-case', () => {
   it('should fail on same bid', async () => {
     const email = 'tmp@tmp'
-    const useCase = new PlaceBidUseCase({
+    const placeBid = new PlaceBidUseCase({
       get: () =>
         Promise.resolve({
           seller: email,
@@ -27,7 +27,7 @@ describe('place-bid.use-case', () => {
     })
 
     await rejects(
-      useCase.execute({
+      placeBid.execute({
         id: randomUUID(),
         amount: 10,
         bidder: email,
@@ -41,7 +41,7 @@ describe('place-bid.use-case', () => {
 
   it('should fail on same bidder', async () => {
     const email = 'tmp@tmp'
-    const useCase = new PlaceBidUseCase({
+    const placeBid = new PlaceBidUseCase({
       get: () =>
         Promise.resolve({
           seller: email,
@@ -60,7 +60,7 @@ describe('place-bid.use-case', () => {
     })
 
     await rejects(
-      useCase.execute({
+      placeBid.execute({
         id: randomUUID(),
         amount: 15,
         bidder: email,

@@ -1,11 +1,11 @@
 import { ok } from 'assert'
 import { UseCase } from '../../core/base.use-case'
-import { Auction, auctionStatuses } from '../entities/Auction'
+import { Auction, auctionStatuses } from '../domain/Auction'
 import { AuctionsAppError } from '../../core/auctions-app.error'
-import { GetAuctionByStatusPort } from '../ports/get-auction-by-status.port'
+import { GetAuctionsByStatusPort } from '../ports/get-auctions-by-status.port'
 
 export class GetAuctionsByStatusUseCase implements UseCase<Auction['status'], Auction[]> {
-  constructor(private readonly getByStatusPort: GetAuctionByStatusPort) {}
+  constructor(private readonly getByStatusPort: GetAuctionsByStatusPort) {}
 
   public async execute(status: Auction['status']) {
     ok(auctionStatuses.includes(status), new AuctionsAppError(`"status" not supported, can't perform get`))

@@ -1,10 +1,7 @@
-import { Auction, AuctionID } from '../entities/Auction'
-import { GetAuctionByIdPort } from './get-auction-by-id.port'
+import { Auction } from '../domain/Auction'
+import { PlaceBidRequest } from '../user-cases/place-bid.use-case'
+import { GetAuctionPort } from './get-auction.port'
 
-export type PlaceBidType = Auction['highestBid'] & {
-  id: AuctionID
-}
-
-export interface PlaceBidPort extends GetAuctionByIdPort {
-  placeBid(placeBid: PlaceBidType): Promise<Auction>
+export interface PlaceBidPort extends GetAuctionPort {
+  placeBid(placeBid: PlaceBidRequest): Promise<Auction>
 }

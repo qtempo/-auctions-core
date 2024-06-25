@@ -1,17 +1,17 @@
 import { ok } from 'node:assert'
 import { UseCase } from '../../core/base.use-case'
-import { Auction } from '../entities/Auction'
-import { UploadPicturePort } from '../ports/upload-picture.port'
+import { Auction } from '../domain/Auction'
+import { UploadAuctionPicturePort } from '../ports/upload-auction-picture.port'
 import { UploadPictureError } from '../errors/upload-picture.error'
 
-export type UploadPictureRequest = Pick<Auction, 'id' | 'seller'> & {
+export type UploadAuctionPictureRequest = Pick<Auction, 'id' | 'seller'> & {
   pictureBase64: string
 }
 
-export class UploadPictureUseCase implements UseCase<UploadPictureRequest, Auction> {
-  constructor(private readonly port: UploadPicturePort) {}
+export class UploadAuctionPictureUseCase implements UseCase<UploadAuctionPictureRequest, Auction> {
+  constructor(private readonly port: UploadAuctionPicturePort) {}
 
-  public async execute({ id, seller, pictureBase64 }: UploadPictureRequest) {
+  public async execute({ id, seller, pictureBase64 }: UploadAuctionPictureRequest) {
     ok(id, new UploadPictureError(`"id" is missing`))
     const auction = await this.port.get(id)
     ok(auction.seller === seller, new UploadPictureError(`Only seller allowed to perform this action.`))

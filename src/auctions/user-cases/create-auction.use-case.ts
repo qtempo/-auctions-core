@@ -4,14 +4,14 @@ import { randomUUID } from 'node:crypto'
 import { UseCase } from '../../core/base.use-case'
 import { CreateAuctionPort } from '../ports/create-auction.port'
 import { CreateAuctionError } from '../errors/create-auction.error'
-import { Auction } from '../entities/Auction'
+import { Auction } from '../domain/Auction'
 
-type CreateAuctionType = Pick<Auction, 'title' | 'seller'>
+type CreateAuctionRequest = Pick<Auction, 'title' | 'seller'>
 
-export class CreateAuctionUseCase implements UseCase<CreateAuctionType, Auction> {
+export class CreateAuctionUseCase implements UseCase<CreateAuctionRequest, Auction> {
   constructor(private readonly createAuctionPort: CreateAuctionPort) {}
 
-  public async execute({ title, seller }: CreateAuctionType) {
+  public async execute({ title, seller }: CreateAuctionRequest) {
     ok(title, new CreateAuctionError('title'))
     ok(seller, new CreateAuctionError('seller'))
 

@@ -27,12 +27,8 @@ const createErrorCases = [
 describe('create-auction.use-case', async () => {
   for (const { name, createOptions, errorMessage } of createErrorCases) {
     it(name, async () => {
-      const adapter: CreateAuctionPort = {
-        save: mock.fn(),
-      }
-      const useCase = new CreateAuctionUseCase(adapter)
-
-      await rejects(useCase.execute(createOptions), {
+      const createAuction = new CreateAuctionUseCase({ save: mock.fn() })
+      await rejects(createAuction.execute(createOptions), {
         name: CreateAuctionError.name,
         message: errorMessage,
       })
@@ -40,29 +36,27 @@ describe('create-auction.use-case', async () => {
   }
 
   it('should create an auction', async () => {
-    const adapter: CreateAuctionPort = {
-      save: mock.fn(),
-    }
-    const useCase = new CreateAuctionUseCase(adapter)
-
     const title = 'title'
     const seller = 'seller'
-    const auction = await useCase.execute({ title, seller })
+    const adapter: CreateAuctionPort = { save: mock.fn() }
+    const createAuction = new CreateAuctionUseCase(adapter)
+    const auction = await createAuction.execute({ title, seller })
 
+    ok((adapter.save as unknown as Mock<any>).mock.callCount() === 1)
     ok(auction.id, '"id" must be defined')
     ok(auction.title === title, '"titles" not match')
     ok(auction.seller === seller, '"sellers" not match')
     ok(auction.status === 'OPEN', '"status" must be OPEN')
 
-    const date = new Date()
-    const day = date.toISOString().split('T')[0]
-    const hour = date.getUTCHours()
-
-    ok(auction.createdAt.startsWith(day), '"createdAt" day not match')
-    ok(auction.endingAt.startsWith(day), '"endingAt" day not match')
-    ok(auction.createdAt.split('T')[1].startsWith(hour + ''), '"createdAt" hour not match')
-    ok(auction.endingAt.split('T')[1].startsWith(hour + 1 + ''), '"endingAt" hour not match')
-
-    ok((adapter.save as unknown as Mock<any>).mock.callCount() === 1)
+    const newDate = new Date()
+    const [date] = new Date().toISOString().split('T')
+    const hour = newDate.getHours()
+    const createdAtHours = new Date(auction.createdAt).getHours()
+    const endingAtHours = new Date(auction.endingAt).getHours()
+    
+    ok(auction.createdAt.startsWith(date), '"createdAt" day not match')
+    ok(auction.endingAt.startsWith(date), '"endingAt" day not match')
+    ok(createdAtHours === hour, '"createdAt" hour not match')
+    ok(endingAtHours === hour + 1, '"endingAt" hour not match')
   })
 })
