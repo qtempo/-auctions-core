@@ -1,5 +1,5 @@
 export class CreateAuctionError extends Error {
-  name: 'CreateAuctionError' = 'CreateAuctionError'
+  name = 'CreateAuctionError' as const
 
   constructor(message: string) {
     super(message)

@@ -1,3 +1,3 @@
 export class AuctionPlaceBidError extends Error {
-  name: 'AuctionPlaceBidError' = 'AuctionPlaceBidError'
+  name = 'AuctionPlaceBidError' as const
 }

@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
     "strict": true,
     "preserveConstEnums": true,
@@ -16,7 +17,12 @@
     "target": "ES2020",
     "module": "CommonJS",
     "sourceMap": true,
-     "outDir": "build"
+    "outDir": "build",
+    "incremental": true
   },
-  "exclude": ["node_modules", "**/*.test.ts"]
+  "include": ["src"],
+  "exclude": [
+    "node_modules",
+    "**/*.test.ts"
+  ]
 }

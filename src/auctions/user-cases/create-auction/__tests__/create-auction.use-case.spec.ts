@@ -4,8 +4,13 @@ import { ok } from 'node:assert'
 import { CreateAuctionUseCase } from '../create-auction.use-case'
 import { CreateAuctionPort } from '../create-auction.port'
 import { CreateAuctionError } from '../create-auction.error'
+import { CreateAuctionDTO } from '../create-auction.dto'
 
-const createErrorCases = [
+const createErrorCases: Array<{
+  name: string
+  errorMessage: string
+  createOptions: CreateAuctionDTO
+}> = [
   {
     name: '"title" validation error',
     errorMessage: `auction's "title" not provided`,
@@ -44,7 +49,7 @@ describe('create-auction.use-case', async () => {
     const result = await createAuction.execute({ title, seller })
 
     ok(result.isRight(), `createAuction execution must return an "Auction"`)
-    ok((adapter.save as unknown as Mock<any>).mock.callCount() === 1)
+    ok((adapter.save as unknown as Mock<() => void>).mock.callCount() === 1)
 
     ok(result.value.id, '"id" must be defined')
     ok(result.value.title === title, '"titles" not match')

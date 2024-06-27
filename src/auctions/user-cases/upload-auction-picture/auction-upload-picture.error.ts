@@ -1,3 +1,3 @@
 export class AuctionUploadPictureError extends Error {
-  name: 'UploadPictureError' = 'UploadPictureError'
+  name = 'UploadPictureError' as const
 }
