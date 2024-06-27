@@ -1,9 +1,10 @@
-import { randomUUID } from 'node:crypto'
 import { describe, mock, it } from 'node:test'
-import { rejects } from 'node:assert'
+import { ok } from 'node:assert'
+import { randomUUID } from 'node:crypto'
 
+import { AuctionNotFoundError } from '../../get-auction/auction-not-found.error'
 import { PlaceBidUseCase } from '../place-bid.use-case'
-import { PlaceBidError } from '../../errors/place-bid.error'
+import { AuctionPlaceBidError } from '../auction-place-bid.error'
 
 describe('place-bid.use-case', () => {
   it('should fail on same bid', async () => {
@@ -26,17 +27,15 @@ describe('place-bid.use-case', () => {
       placeBid: mock.fn(),
     })
 
-    await rejects(
-      placeBid.execute({
-        id: randomUUID(),
-        amount: 10,
-        bidder: email,
-      }),
-      {
-        name: PlaceBidError.name,
-        message: 'Bid must be higher than: 10',
-      },
-    )
+    const placeBidResult = await placeBid.execute({
+      id: randomUUID(),
+      amount: 10,
+      bidder: email,
+    })
+
+    ok(placeBidResult.isLeft(), `placeBid execution must return an "${AuctionNotFoundError.name}"`)
+    ok(placeBidResult.value.name === AuctionPlaceBidError.name, `placeBid execution returns wrong error type`)
+    ok(placeBidResult.value.message, `Bid must be higher than: 10`)
   })
 
   it('should fail on same bidder', async () => {
@@ -59,16 +58,14 @@ describe('place-bid.use-case', () => {
       placeBid: mock.fn(),
     })
 
-    await rejects(
-      placeBid.execute({
-        id: randomUUID(),
-        amount: 15,
-        bidder: email,
-      }),
-      {
-        name: PlaceBidError.name,
-        message: `Can't bid on your own auctions!`,
-      },
-    )
+    const placeBidResult = await placeBid.execute({
+      id: randomUUID(),
+      amount: 15,
+      bidder: email,
+    })
+
+    ok(placeBidResult.isLeft(), `placeBid execution must return an "${AuctionPlaceBidError.name}"`)
+    ok(placeBidResult.value.name === AuctionPlaceBidError.name, `placeBid execution returns wrong error type`)
+    ok(placeBidResult.value.message, `Can't bid on your own auctions!`)
   })
 })

@@ -1,11 +1,15 @@
 {
   "scripts": {
     "prepare": "husky",
+    "build": "tsc --build",
     "test": "tsx --test $(find src -type f -name '*.spec.ts')"
   },
   "devDependencies": {
     "@types/node": "^20.14.8",
     "tsx": "^4.15.7",
     "typescript": "^5.4.3"
+  },
+  "dependencies": {
+    "@sweet-monads/either": "^3.3.1"
   }
 }

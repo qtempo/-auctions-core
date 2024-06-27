@@ -1,16 +1,29 @@
-import { UseCase } from '../../core/base.use-case'
-import { ProcessAuctionsPort } from '../ports/process-auctions.port'
-import { Auction } from '../domain/Auction'
+import { UseCase } from '../../../core/base.use-case'
+import { left, right } from '../../../core/result'
+import { AuctionsError } from '../../../core/auctions.error'
+import { Auction } from '../../domain/auction'
+import { ProcessAuctionsPort } from './process-auctions.port'
+
+/**
+ * todo
+ * - test
+ * - change notification to event
+ * - package
+ */
 
 export class ProcessAuctionsUseCase implements UseCase<void, number> {
   constructor(private readonly port: ProcessAuctionsPort) {}
 
   public async execute() {
-    const expiredAuctions = await this.port.getExpiredAuctions()
-    const closePromises = expiredAuctions.map((a) => this.closeAuction(a))
-    await Promise.all(closePromises)
+    try {
+      const expiredAuctions = await this.port.getExpiredAuctions()
+      const closePromises = expiredAuctions.map((a) => this.closeAuction(a))
+      await Promise.all(closePromises)
 
-    return expiredAuctions.length
+      return right(expiredAuctions.length)
+    } catch (error) {
+      return left(new AuctionsError(`Unexpected error occur: ${(error as Error)['message']}`))
+    }
   }
 
   private async closeAuction(auction: Auction) {

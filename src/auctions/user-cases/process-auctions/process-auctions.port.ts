@@ -1,4 +1,4 @@
-import { Auction, AuctionBidderEmail, AuctionID, AuctionSellerEmail } from '../domain/Auction'
+import { Auction, AuctionBidderEmail, AuctionID, AuctionSellerEmail } from '../../domain/auction'
 
 export interface ProcessAuctionsPort {
   getExpiredAuctions(): Promise<Auction[]>
