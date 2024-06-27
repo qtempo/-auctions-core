@@ -48,7 +48,7 @@ describe('create-auction.use-case', async () => {
     const createAuction = new CreateAuctionUseCase(adapter)
     const result = await createAuction.execute({ title, seller })
 
-    ok(result.isRight(), `createAuction execution must return an "Auction" Q`)
+    ok(result.isRight(), `createAuction execution must return an "Auction"`)
     ok((adapter.save as unknown as Mock<() => void>).mock.callCount() === 1)
 
     ok(result.value.id, '"id" must be defined')
