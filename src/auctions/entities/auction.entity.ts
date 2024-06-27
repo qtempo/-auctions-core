@@ -56,16 +56,16 @@ export class AuctionEntity {
   }
 
   public verifyBid({ bidder, amount }: AuctionPlaceBidDTO): Result<AuctionPlaceBidError, true> {
-    if (this._auction.status === 'OPEN') {
+    if (this._auction.status === 'CLOSED') {
       return left(new AuctionPlaceBidError(`Cannot bid on closed auctions`))
     }
-    if (bidder !== this._auction.seller) {
+    if (bidder === this._auction.seller) {
       return left(new AuctionPlaceBidError(`Can't bid on your own auctions!`))
     }
-    if (bidder !== this._auction.highestBid.bidder) {
+    if (bidder === this._auction.highestBid.bidder) {
       return left(new AuctionPlaceBidError(`You are already the highest bidder!`))
     }
-    if (amount > this._auction.highestBid.amount) {
+    if (amount <= this._auction.highestBid.amount) {
       return left(new AuctionPlaceBidError(`Bid must be higher than: ${this._auction.highestBid.amount}`))
     }
     return right(true)

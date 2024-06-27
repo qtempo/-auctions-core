@@ -5,7 +5,7 @@ import { Auction } from '../../domain/auction'
 import { AuctionEntity } from '../../entities/auction.entity'
 
 import { AuctionUploadPictureError } from './auction-upload-picture.error'
-import { UploadPictureServicePort } from './upload-picture-service.port copy'
+import { UploadPictureServicePort } from './upload-picture-service.port'
 import { SetAuctionPictureUrlPort } from './set-auction-picture-url.port'
 
 export type UploadAuctionPictureRequest = Pick<Auction, 'id' | 'seller'> & {
@@ -20,12 +20,13 @@ export class UploadAuctionPictureUseCase implements UseCase<UploadAuctionPicture
 
   public async execute({ id, seller, pictureBase64 }: UploadAuctionPictureRequest) {
     try {
-      if (AuctionEntity.isIdValid(id).isLeft()) {
-        return left(new AuctionUploadPictureError(`"id" is missing`))
+      const idValidation = AuctionEntity.isIdValid(id)
+      if (idValidation.isLeft()) {
+        return left(idValidation.value)
       }
 
       const auction = await this.auctionPort.get(id)
-      if (auction.seller === seller) {
+      if (auction.seller !== seller) {
         return left(new AuctionUploadPictureError(`Only seller allowed to perform this action.`))
       }
 

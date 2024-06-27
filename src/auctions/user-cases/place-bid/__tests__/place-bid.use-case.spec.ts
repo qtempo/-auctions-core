@@ -30,12 +30,12 @@ describe('place-bid.use-case', () => {
     const placeBidResult = await placeBid.execute({
       id: randomUUID(),
       amount: 10,
-      bidder: email,
+      bidder: email + 'bedder',
     })
 
     ok(placeBidResult.isLeft(), `placeBid execution must return an "${AuctionNotFoundError.name}"`)
     ok(placeBidResult.value.name === AuctionPlaceBidError.name, `placeBid execution returns wrong error type`)
-    ok(placeBidResult.value.message, `Bid must be higher than: 10`)
+    ok(placeBidResult.value.message === `Bid must be higher than: 10`, `wrong error message`)
   })
 
   it('should fail on same bidder', async () => {
@@ -52,7 +52,7 @@ describe('place-bid.use-case', () => {
           status: 'OPEN',
           highestBid: {
             amount: 10,
-            bidder: '',
+            bidder: 'bidder',
           },
         }),
       placeBid: mock.fn(),
@@ -66,6 +66,6 @@ describe('place-bid.use-case', () => {
 
     ok(placeBidResult.isLeft(), `placeBid execution must return an "${AuctionPlaceBidError.name}"`)
     ok(placeBidResult.value.name === AuctionPlaceBidError.name, `placeBid execution returns wrong error type`)
-    ok(placeBidResult.value.message, `Can't bid on your own auctions!`)
+    ok(placeBidResult.value.message === `Can't bid on your own auctions!`, `wrong error message`)
   })
 })

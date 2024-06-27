@@ -18,6 +18,6 @@ describe('get-auction.use-case', async () => {
 
     ok(result.isLeft(), `getAuction execution must return an "${AuctionNotFoundError.name}"`)
     ok(result.value.name === AuctionNotFoundError.name, `getAuction execution returns wrong error type`)
-    ok(result.value.message, `auction with id: ${uuid} doesn't exist`)
+    ok(result.value.message === `auction with id: ${uuid} doesn't exist`, `wrong error message`)
   })
 })
