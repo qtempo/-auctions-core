@@ -7,33 +7,30 @@ import { Auction, AuctionID, auctionStatuses } from '../domain/auction'
 import { CreateAuctionRequest } from '../user-cases/create-auction/create-auction.request'
 import { CreateAuctionError } from '../user-cases/create-auction/create-auction.error'
 import { AuctionPlaceBidError } from '../user-cases/place-bid/auction-place-bid.error'
-import { AuctionUploadPictureError } from '../user-cases/upload-auction-picture/auction-upload-picture.error'
 import { AuctionPlaceBidRequest } from '../user-cases/place-bid/auction-place-bid.request'
 import { CreateAuctionPort } from '../user-cases/create-auction/create-auction.port'
 import { GetAuctionPort } from '../user-cases/get-auction/get-auction.port'
 import { AuctionNotFoundError } from '../user-cases/get-auction/auction-not-found.error'
 import { GetAuctionsByStatusPort } from '../user-cases/get-auctions-by-status/get-auctions-by-status.port'
 import { AuctionPlaceBidPort } from '../user-cases/place-bid/auction-place-bid.port'
+import { SetAuctionPictureUrlPort } from '../user-cases/upload-auction-picture/set-auction-picture-url.port'
 
 /**
  * acts as "template" for an infrastructure
  * and as "ports" for use cases
  */
 export abstract class AuctionRepository
-implements CreateAuctionPort, GetAuctionPort, GetAuctionsByStatusPort, AuctionPlaceBidPort
+implements CreateAuctionPort, GetAuctionPort, GetAuctionsByStatusPort, AuctionPlaceBidPort, SetAuctionPictureUrlPort
 {
   constructor(private _auction?: Auction) {}
 
-  public set auction(value: Auction) {
-    this._auction = value
-  }
+  protected abstract persist(auction: Auction): Promise<void>
+  protected abstract queryById(auctionId: AuctionID): Promise<Auction>
+  protected abstract queryByStatus(status: Auction['status']): Promise<Auction[]>
+  protected abstract persistBid(request: AuctionPlaceBidRequest): Promise<Auction>
+  protected abstract persistAuctionPictureUrl(id: AuctionID, pictureUrl: string): Promise<Auction>
 
-  public abstract persist(auction: Auction): Promise<void>
-  public abstract queryById(auctionId: AuctionID): Promise<Auction>
-  public abstract queryByStatus(status: Auction['status']): Promise<Auction[]>
-  public abstract persistBid(request: AuctionPlaceBidRequest): Promise<Auction>
-
-  public static isIdValid(auctionID: AuctionID): Result<AuctionsError, true> {
+  private isIdValid(auctionID: AuctionID): Result<AuctionsError, true> {
     const rule = new RegExp(/\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b/)
     return rule.test(auctionID) ? right(true) : left(new AuctionsError('provide a proper auction "id"'))
   }
@@ -50,7 +47,6 @@ implements CreateAuctionPort, GetAuctionPort, GetAuctionsByStatusPort, AuctionPl
     const now = new Date()
     const endDate = new Date()
     endDate.setHours(now.getHours() + 1)
-
     const auction: Auction = {
       id: randomUUID(),
       title,
@@ -64,23 +60,22 @@ implements CreateAuctionPort, GetAuctionPort, GetAuctionsByStatusPort, AuctionPl
       },
       pictureUrl: '',
     }
-
     await this.persist(auction)
 
     return right(auction)
   }
 
   public async get(auctionID: AuctionID): Promise<Result<AuctionNotFoundError | AuctionsError, Auction>> {
-    const validation = AuctionRepository.isIdValid(auctionID)
+    const validation = this.isIdValid(auctionID)
     if (validation.isLeft()) {
       return left(validation.value)
     }
 
     const auction = await this.queryById(auctionID)
-    if (AuctionRepository.isIdValid(auction?.id).isLeft()) {
+    if (this.isIdValid(auction?.id).isLeft()) {
       return left(new AuctionNotFoundError(auctionID))
     }
-    this.auction = auction
+    this._auction = auction
 
     return right(auction)
   }
@@ -117,12 +112,11 @@ implements CreateAuctionPort, GetAuctionPort, GetAuctionsByStatusPort, AuctionPl
     return right(auction)
   }
 
-  public static verifyPictureBuffer(pictureBase64: string): Result<AuctionUploadPictureError, Buffer> {
-    const base64string = pictureBase64.replace(/^data:image\/\w+;base64,/, '')
-    const buffer = Buffer.from(base64string, 'base64')
-    if (buffer.toString('base64') !== base64string) {
-      return left(new AuctionUploadPictureError('Invalid base64 image.'))
+  public async setPictureUrl(id: AuctionID, pictureUrl: string): Promise<Result<Error, Auction>> {
+    const auction = await this.persistAuctionPictureUrl(id, pictureUrl)
+    if (!auction?.id) {
+      return left(new AuctionNotFoundError(id))
     }
-    return right(buffer)
+    return right(auction)
   }
 }

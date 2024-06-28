@@ -2,7 +2,6 @@ import { UseCase } from '../../../core/base.use-case'
 import { left, right } from '../../../core/result'
 import { AuctionsError } from '../../../core/auctions.error'
 import { Auction } from '../../domain/auction'
-import { AuctionRepository } from '../../repositories/auction.repository'
 
 import { AuctionUploadPictureError } from './auction-upload-picture.error'
 import { UploadPictureServicePort } from './upload-picture-service.port'
@@ -20,26 +19,22 @@ export class UploadAuctionPictureUseCase implements UseCase<UploadAuctionPicture
 
   public async execute({ id, seller, pictureBase64 }: UploadAuctionPictureRequest) {
     try {
-      const idValidation = AuctionRepository.isIdValid(id)
-      if (idValidation.isLeft())
-        return left(idValidation.value)
-
       const auctionResult = await this.auctionPort.get(id)
       if (auctionResult.isLeft())
         return left(auctionResult.value)
 
-      const auction = auctionResult.value
-      if (auction.seller !== seller)
+      if (auctionResult.value.seller !== seller)
         return left(new AuctionUploadPictureError('Only seller allowed to perform this action.'))
 
-      const pictureVerified = AuctionRepository.verifyPictureBuffer(pictureBase64)
-      if (pictureVerified.isLeft())
-        return left(pictureVerified.value)
+      const uploadResult = await this.uploadPictureService.uploadPicture(id, pictureBase64)
+      if (uploadResult.isLeft())
+        return left(uploadResult.value)
 
-      const pictureUrl = await this.uploadPictureService.uploadPicture(id, pictureVerified.value)
-      const updated = await this.auctionPort.setPictureUrl(id, pictureUrl)
+      const updatedResult = await this.auctionPort.setPictureUrl(id, uploadResult.value)
+      if (updatedResult.isLeft())
+        return left(updatedResult.value)
 
-      return right(updated)
+      return right(updatedResult.value)
     } catch (error) {
       return left(new AuctionsError(`Unexpected error occur: ${(error as Error)['message']}`))
     }

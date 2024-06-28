@@ -1,12 +1,21 @@
-import { describe, mock, it, before } from 'node:test'
+import { describe, it, before } from 'node:test'
 import { ok } from 'node:assert'
 import { UUID, randomUUID } from 'node:crypto'
 import fs from 'node:fs/promises'
 
 import { AuctionsError } from '../../../../core/auctions.error'
-import { UploadAuctionPictureUseCase } from '../upload-auction-picture.use-case'
+import { UploadAuctionPictureRequest, UploadAuctionPictureUseCase } from '../upload-auction-picture.use-case'
 import { AuctionUploadPictureError } from '../auction-upload-picture.error'
-import { Auction } from '../../../domain/auction'
+import { MockAuctionRepository } from '../../../repositories/mock-auction.repository'
+import { MockFileUploadRepository } from '../../../repositories/mock-file-upload.repository'
+
+const executeUseCase = async (args: UploadAuctionPictureRequest) => {
+  const useCase = new UploadAuctionPictureUseCase(
+    new MockAuctionRepository(),
+    new MockFileUploadRepository(),
+  )
+  return await useCase.execute(args)
+}
 
 describe('upload-auction-picture.use-case', () => {
   let pictureBase64 = ''
@@ -16,17 +25,7 @@ describe('upload-auction-picture.use-case', () => {
   })
 
   it('should fail on auction id verification', async () => {
-    const useCase = new UploadAuctionPictureUseCase(
-      {
-        get: mock.fn(),
-        setPictureUrl: mock.fn(),
-      },
-      {
-        uploadPicture: mock.fn(),
-      },
-    )
-
-    const result = await useCase.execute({
+    const result = await executeUseCase({
       id: (randomUUID() + '123123') as UUID,
       seller: '',
       pictureBase64: '',
@@ -38,19 +37,7 @@ describe('upload-auction-picture.use-case', () => {
   })
 
   it('should fail if upload made not buy a seller', async () => {
-    const useCase = new UploadAuctionPictureUseCase(
-      {
-        setPictureUrl: mock.fn(),
-        get(request) {
-          return Promise.resolve({ id: request, seller: 'seller' } as Auction)
-        },
-      },
-      {
-        uploadPicture: mock.fn(),
-      },
-    )
-
-    const result = await useCase.execute({
+    const result = await executeUseCase({
       id: randomUUID(),
       seller: 'not-seller',
       pictureBase64: '',
@@ -62,19 +49,7 @@ describe('upload-auction-picture.use-case', () => {
   })
 
   it('should fail on picture validation', async () => {
-    const useCase = new UploadAuctionPictureUseCase(
-      {
-        setPictureUrl: mock.fn(),
-        get(request) {
-          return Promise.resolve({ id: request, seller: 'seller' } as Auction)
-        },
-      },
-      {
-        uploadPicture: mock.fn(),
-      },
-    )
-
-    const result = await useCase.execute({
+    const result = await executeUseCase({
       id: randomUUID(),
       seller: 'seller',
       pictureBase64: pictureBase64 + 'qwerty',
@@ -87,21 +62,7 @@ describe('upload-auction-picture.use-case', () => {
 
   it('should fail on picture validation', async () => {
     const auctionID = randomUUID()
-    const useCase = new UploadAuctionPictureUseCase(
-      {
-        get(request) {
-          return Promise.resolve({ id: request, seller: 'seller' } as Auction)
-        },
-        setPictureUrl(id, pictureUrl) {
-          return Promise.resolve({ id, pictureUrl } as Auction)
-        },
-      },
-      {
-        uploadPicture: mock.fn(),
-      },
-    )
-
-    const result = await useCase.execute({
+    const result = await executeUseCase({
       id: auctionID,
       seller: 'seller',
       pictureBase64: pictureBase64,

@@ -3,7 +3,7 @@ import parserTs from '@typescript-eslint/parser'
 
 export default [
   {
-    files: ['src/**/*.{js,ts,tsx}'],
+    files: ['src/**/*.{js,jsx,ts,tsx}'],
     plugins: {
       '@stylistic': stylistic
     },
@@ -19,6 +19,8 @@ export default [
       'arrow-parens': ["error", 'as-needed'],
       'no-trailing-spaces': ['error'],
       'nonblock-statement-body-position': ['error', 'below'],
+      'no-multi-spaces': ["error", { 'ignoreEOLComments': false }],
+      'no-useless-rename': ['error', { 'ignoreDestructuring': false }]
     }
   }
 ]

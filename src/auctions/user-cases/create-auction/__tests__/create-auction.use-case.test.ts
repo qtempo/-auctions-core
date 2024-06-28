@@ -68,7 +68,7 @@ describe('create-auction.use-case', async () => {
     ok(result.value.createdAt.startsWith(date), '"createdAt" day not match')
     ok(result.value.endingAt.startsWith(date), '"endingAt" day not match')
     ok(createdAtHours === hour, '"createdAt" hour not match')
-    // todo: need the fix depended on time
+    // todo: need the fix depended on current time of the day
     // ok(endingAtHours === hour + 1, '"endingAt" hour not match')
   })
 })

@@ -1,8 +1,8 @@
 {
   "scripts": {
     "build": "tsc --build",
-    "test": "tsx --test $(find src -type f -name '*.test.ts')",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test": "tsx --test $(find src -type f -name '*.test.ts')"
   },
   "devDependencies": {
     "@stylistic/eslint-plugin": "^2.3.0",

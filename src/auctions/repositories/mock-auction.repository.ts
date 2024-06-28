@@ -4,18 +4,13 @@ import { AuctionPlaceBidRequest } from '../user-cases/place-bid/auction-place-bi
 import { AuctionRepository } from './auction.repository'
 
 export class MockAuctionRepository extends AuctionRepository {
-  public persist(auction: Auction): Promise<void> {
-    auction
-    return Promise.resolve()
-  }
-
-  public async queryById(id: AuctionID): Promise<Auction> {
+  private createPatchAuction(patch: Partial<Auction>): Auction {
     const now = new Date()
     const endDate = new Date()
     endDate.setHours(now.getHours() + 1)
 
-    return Promise.resolve({
-      id,
+    const newOne: Auction = {
+      id: randomUUID(),
       title: 'title',
       seller: 'seller',
       status: 'OPEN',
@@ -26,48 +21,28 @@ export class MockAuctionRepository extends AuctionRepository {
         amount: 0,
         bidder: '',
       },
-    })
+    }
+
+    return Object.assign({}, newOne, patch)
   }
 
-  public queryByStatus(status: 'OPEN' | 'CLOSED'): Promise<Auction[]> {
-    const now = new Date()
-    const endDate = new Date()
-    endDate.setHours(now.getHours() + 1)
-
-    return Promise.resolve([
-      {
-        id: randomUUID(),
-        title: 'title',
-        seller: 'seller',
-        status,
-        pictureUrl: '',
-        createdAt: now.toISOString(),
-        endingAt: endDate.toISOString(),
-        highestBid: {
-          amount: 0,
-          bidder: '',
-        },
-      },
-    ])
+  public async persist(auction: Auction): Promise<void> {
+    return auction && Promise.resolve()
   }
 
-  public persistBid(request: AuctionPlaceBidRequest): Promise<Auction> {
-    const now = new Date()
-    const endDate = new Date()
-    endDate.setHours(now.getHours() + 1)
+  public async queryById(id: AuctionID): Promise<Auction> {
+    return Promise.resolve(this.createPatchAuction({ id }))
+  }
 
-    return Promise.resolve({
-      id: request.id,
-      title: 'title',
-      seller: 'seller',
-      status: 'OPEN',
-      pictureUrl: '',
-      createdAt: now.toISOString(),
-      endingAt: endDate.toISOString(),
-      highestBid: {
-        amount: request.amount,
-        bidder: request.bidder,
-      },
-    })
+  public async queryByStatus(status: 'OPEN' | 'CLOSED'): Promise<Auction[]> {
+    return Promise.resolve([this.createPatchAuction({ status })])
+  }
+
+  public async persistBid({ id, bidder, amount }: AuctionPlaceBidRequest): Promise<Auction> {
+    return Promise.resolve(this.createPatchAuction({ id, highestBid: { bidder, amount } }))
+  }
+
+  public async persistAuctionPictureUrl(id: AuctionID, pictureUrl: string): Promise<Auction> {
+    return Promise.resolve(this.createPatchAuction({ id, pictureUrl }))
   }
 }
