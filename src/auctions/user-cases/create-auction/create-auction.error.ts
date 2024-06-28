@@ -6,10 +6,10 @@ export class CreateAuctionError extends Error {
   }
 
   public static titleValidationFail() {
-    return new CreateAuctionError(`auction's "title" not provided`)
+    return new CreateAuctionError('auction\'s "title" not provided')
   }
 
   public static sellerValidationFail() {
-    return new CreateAuctionError(`auction's "seller" not provided`)
+    return new CreateAuctionError('auction\'s "seller" not provided')
   }
 }

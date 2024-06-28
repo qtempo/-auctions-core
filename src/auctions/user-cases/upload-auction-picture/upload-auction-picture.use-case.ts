@@ -2,7 +2,7 @@ import { UseCase } from '../../../core/base.use-case'
 import { left, right } from '../../../core/result'
 import { AuctionsError } from '../../../core/auctions.error'
 import { Auction } from '../../domain/auction'
-import { AuctionEntity } from '../../entities/auction.entity'
+import { AuctionRepository } from '../../repositories/auction.repository'
 
 import { AuctionUploadPictureError } from './auction-upload-picture.error'
 import { UploadPictureServicePort } from './upload-picture-service.port'
@@ -16,24 +16,25 @@ export class UploadAuctionPictureUseCase implements UseCase<UploadAuctionPicture
   constructor(
     private readonly auctionPort: SetAuctionPictureUrlPort,
     private readonly uploadPictureService: UploadPictureServicePort,
-  ) {}
+  ) { }
 
   public async execute({ id, seller, pictureBase64 }: UploadAuctionPictureRequest) {
     try {
-      const idValidation = AuctionEntity.isIdValid(id)
-      if (idValidation.isLeft()) {
+      const idValidation = AuctionRepository.isIdValid(id)
+      if (idValidation.isLeft())
         return left(idValidation.value)
-      }
 
-      const auction = await this.auctionPort.get(id)
-      if (auction.seller !== seller) {
-        return left(new AuctionUploadPictureError(`Only seller allowed to perform this action.`))
-      }
+      const auctionResult = await this.auctionPort.get(id)
+      if (auctionResult.isLeft())
+        return left(auctionResult.value)
 
-      const pictureVerified = AuctionEntity.verifyPictureBuffer(pictureBase64)
-      if (pictureVerified.isLeft()) {
+      const auction = auctionResult.value
+      if (auction.seller !== seller)
+        return left(new AuctionUploadPictureError('Only seller allowed to perform this action.'))
+
+      const pictureVerified = AuctionRepository.verifyPictureBuffer(pictureBase64)
+      if (pictureVerified.isLeft())
         return left(pictureVerified.value)
-      }
 
       const pictureUrl = await this.uploadPictureService.uploadPicture(id, pictureVerified.value)
       const updated = await this.auctionPort.setPictureUrl(id, pictureUrl)

@@ -12,10 +12,10 @@ export interface Auction {
   status: (typeof auctionStatuses)[number]
   createdAt: string
   endingAt: string
+  seller: AuctionSellerEmail
+  pictureUrl: string
   highestBid: {
     amount: number
     bidder: AuctionBidderEmail
   }
-  seller: AuctionSellerEmail
-  pictureUrl: string
 }

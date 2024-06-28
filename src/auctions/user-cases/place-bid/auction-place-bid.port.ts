@@ -1,7 +1,8 @@
+import { Result } from '../../../core/result'
 import { Auction } from '../../domain/auction'
 import { GetAuctionPort } from '../get-auction/get-auction.port'
-import { AuctionPlaceBidDTO } from './auction-place-bid.dto'
+import { AuctionPlaceBidRequest } from './auction-place-bid.request'
 
 export interface AuctionPlaceBidPort extends GetAuctionPort {
-  placeBid(placeBid: AuctionPlaceBidDTO): Promise<Auction>
+  placeBid(placeBid: AuctionPlaceBidRequest): Promise<Result<Error, Auction>> | Result<Error, Auction>
 }

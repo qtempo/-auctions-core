@@ -32,9 +32,9 @@ describe('upload-auction-picture.use-case', () => {
       pictureBase64: '',
     })
 
-    ok(result.isLeft(), `execution must be failed`)
-    ok(result.value.name === AuctionsError.name, `execution returns wrong error type`)
-    ok(result.value.message === `provide a proper auction "id"`, `wrong error message`)
+    ok(result.isLeft(), 'execution must be failed')
+    ok(result.value.name === AuctionsError.name, 'execution returns wrong error type')
+    ok(result.value.message === 'provide a proper auction "id"', 'wrong error message')
   })
 
   it('should fail if upload made not buy a seller', async () => {
@@ -56,9 +56,9 @@ describe('upload-auction-picture.use-case', () => {
       pictureBase64: '',
     })
 
-    ok(result.isLeft(), `execution must be failed`)
-    ok(result.value.name === AuctionUploadPictureError.name, `execution returns wrong error type`)
-    ok(result.value.message === `Only seller allowed to perform this action.`, `wrong error message`)
+    ok(result.isLeft(), 'execution must be failed')
+    ok(result.value.name === AuctionUploadPictureError.name, 'execution returns wrong error type')
+    ok(result.value.message === 'Only seller allowed to perform this action.', 'wrong error message')
   })
 
   it('should fail on picture validation', async () => {
@@ -80,9 +80,9 @@ describe('upload-auction-picture.use-case', () => {
       pictureBase64: pictureBase64 + 'qwerty',
     })
 
-    ok(result.isLeft(), `execution must be failed`)
-    ok(result.value.name === AuctionUploadPictureError.name, `execution returns wrong error type`)
-    ok(result.value.message === `Invalid base64 image.`, `wrong error message`)
+    ok(result.isLeft(), 'execution must be failed')
+    ok(result.value.name === AuctionUploadPictureError.name, 'execution returns wrong error type')
+    ok(result.value.message === 'Invalid base64 image.', 'wrong error message')
   })
 
   it('should fail on picture validation', async () => {
@@ -107,7 +107,7 @@ describe('upload-auction-picture.use-case', () => {
       pictureBase64: pictureBase64,
     })
 
-    ok(result.isRight(), `execution must be fulfilled`)
-    ok(result.value.id === auctionID, `id must be the same`)
+    ok(result.isRight(), 'execution must be fulfilled')
+    ok(result.value.id === auctionID, 'id must be the same')
   })
 })

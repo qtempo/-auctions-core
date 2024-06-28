@@ -2,30 +2,26 @@ import { AuctionsError } from '../../../core/auctions.error'
 import { UseCase } from '../../../core/base.use-case'
 import { left, right } from '../../../core/result'
 import { Auction } from '../../domain/auction'
-import { AuctionEntity } from '../../entities/auction.entity'
 
-import { AuctionPlaceBidDTO } from './auction-place-bid.dto'
+import { AuctionPlaceBidRequest } from './auction-place-bid.request'
 import { AuctionPlaceBidPort } from './auction-place-bid.port'
 
-export class PlaceBidUseCase implements UseCase<AuctionPlaceBidDTO, Auction> {
+export class PlaceBidUseCase implements UseCase<AuctionPlaceBidRequest, Auction> {
   constructor(private readonly placeBidPort: AuctionPlaceBidPort) {}
 
-  public async execute(request: AuctionPlaceBidDTO) {
+  public async execute(request: AuctionPlaceBidRequest) {
     try {
-      const idValidation = AuctionEntity.isIdValid(request.id)
-      if (idValidation.isLeft()) {
-        return left(idValidation.value)
+      const auctionResult = await this.placeBidPort.get(request.id)
+      if (auctionResult.isLeft()) {
+        return left(auctionResult.value)
       }
 
-      const auction = await this.placeBidPort.get(request.id)
-      const verifyResult = new AuctionEntity(auction).verifyBid(request)
-      if (verifyResult.isLeft()) {
-        return left(verifyResult.value)
+      const placeBidResult = await this.placeBidPort.placeBid(request)
+      if (placeBidResult.isLeft()) {
+        return left(placeBidResult.value)
       }
 
-      const updatedAuction = await this.placeBidPort.placeBid(request)
-
-      return right(updatedAuction)
+      return right(placeBidResult.value)
     } catch (error) {
       return left(new AuctionsError(`Unexpected error occur: ${(error as Error)['message']}`))
     }

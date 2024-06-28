@@ -1,7 +1,8 @@
-import { Auction, AuctionBidderEmail, AuctionID, AuctionSellerEmail } from '../../domain/auction'
+import { Notification } from '../../../notifications/domain/notification'
+import { Auction, AuctionID } from '../../domain/auction'
 
 export interface ProcessAuctionsPort {
   getExpiredAuctions(): Promise<Auction[]>
   closeAuction(id: AuctionID): Promise<void>
-  sendNotification(recipient: AuctionSellerEmail | AuctionBidderEmail, subject: string, body: string): Promise<void>
+  sendNotification(notification: Notification): Promise<void>
 }

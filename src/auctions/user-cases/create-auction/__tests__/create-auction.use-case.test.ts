@@ -1,19 +1,19 @@
 import { describe, mock, it, Mock } from 'node:test'
 import { ok } from 'node:assert'
 
+import { MockAuctionRepository } from '../../../repositories/mock-auction.repository'
 import { CreateAuctionUseCase } from '../create-auction.use-case'
-import { CreateAuctionPort } from '../create-auction.port'
 import { CreateAuctionError } from '../create-auction.error'
-import { CreateAuctionDTO } from '../create-auction.dto'
+import { CreateAuctionRequest } from '../create-auction.request'
 
 const createErrorCases: Array<{
   name: string
   errorMessage: string
-  createOptions: CreateAuctionDTO
+  createOptions: CreateAuctionRequest
 }> = [
   {
     name: '"title" validation error',
-    errorMessage: `auction's "title" not provided`,
+    errorMessage: 'auction\'s "title" not provided',
     createOptions: {
       title: '',
       seller: 'q',
@@ -21,7 +21,7 @@ const createErrorCases: Array<{
   },
   {
     name: '"seller" validation error',
-    errorMessage: `auction's "seller" not provided`,
+    errorMessage: 'auction\'s "seller" not provided',
     createOptions: {
       title: 'q',
       seller: '',
@@ -32,24 +32,27 @@ const createErrorCases: Array<{
 describe('create-auction.use-case', async () => {
   for (const { name, createOptions, errorMessage } of createErrorCases) {
     it(name, async () => {
-      const createAuction = new CreateAuctionUseCase({ save: mock.fn() })
+      const adapter = new MockAuctionRepository()
+      const createAuction = new CreateAuctionUseCase(adapter)
       const result = await createAuction.execute(createOptions)
 
       ok(result.isLeft(), `createAuction execution must return an "${CreateAuctionError.name}"`)
-      ok(result.value.name === CreateAuctionError.name, `createAuction execution returns wrong error type`)
-      ok(result.value.message === errorMessage, `createAuction execution returns wrong error message`)
+      ok(result.value.name === CreateAuctionError.name, 'createAuction execution returns wrong error type')
+      ok(result.value.message === errorMessage, 'createAuction execution returns wrong error message')
     })
   }
 
   it('should create an auction', async () => {
     const title = 'title'
     const seller = 'seller'
-    const adapter: CreateAuctionPort = { save: mock.fn() }
+    const adapter = new MockAuctionRepository()
+    adapter.persist = mock.fn()
+
     const createAuction = new CreateAuctionUseCase(adapter)
     const result = await createAuction.execute({ title, seller })
 
-    ok(result.isRight(), `createAuction execution must return an "Auction"`)
-    ok((adapter.save as unknown as Mock<() => void>).mock.callCount() === 1)
+    ok(result.isRight(), 'createAuction execution must return an "Auction"')
+    ok((adapter.persist as unknown as Mock<() => void>).mock.callCount() === 1)
 
     ok(result.value.id, '"id" must be defined')
     ok(result.value.title === title, '"titles" not match')

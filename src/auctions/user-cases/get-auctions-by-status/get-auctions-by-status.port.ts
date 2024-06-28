@@ -1,4 +1,6 @@
-import { Query } from '../../../core/base.query'
+import { Result } from '../../../core/result'
 import { Auction } from '../../domain/auction'
 
-export interface GetAuctionsByStatusPort extends Query<Auction['status'], Auction[]> {}
+export interface GetAuctionsByStatusPort {
+  byStatus(status: Auction['status']): Promise<Result<Error, Auction[]>> | Result<Error, Auction[]>
+}
