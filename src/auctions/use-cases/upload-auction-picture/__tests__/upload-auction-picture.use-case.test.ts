@@ -3,8 +3,6 @@ import { ok } from 'node:assert'
 import { UUID, randomUUID } from 'node:crypto'
 import fs from 'node:fs/promises'
 
-
-
 import { AuctionsError } from '@core/auctions.error'
 import { MockAuctionRepository } from '@auctions/repositories/mock-auction.repository'
 import { MockFileUploadRepository } from '@auctions/repositories/mock-file-upload.repository'
