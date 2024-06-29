@@ -1,6 +1,6 @@
 import { randomUUID } from 'crypto'
-import { Auction, AuctionID } from '../domain/auction'
-import { AuctionPlaceBidRequest } from '../user-cases/place-bid/auction-place-bid.request'
+import { Auction, AuctionID } from '@auctions/domain/auction'
+import { AuctionPlaceBidRequest } from '@auctions/use-cases/place-bid/auction-place-bid.request'
 import { AuctionRepository } from './auction.repository'
 
 export class MockAuctionRepository extends AuctionRepository {

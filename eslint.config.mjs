@@ -20,7 +20,7 @@ export default [
       'no-trailing-spaces': ['error'],
       'nonblock-statement-body-position': ['error', 'below'],
       'no-multi-spaces': ["error", { 'ignoreEOLComments': false }],
-      'no-useless-rename': ['error', { 'ignoreDestructuring': false }]
+      'no-useless-rename': ['error', { 'ignoreDestructuring': false }],
     }
   }
 ]

@@ -1,19 +1,19 @@
 import { randomUUID } from 'crypto'
 
-import { Result, left, right } from '../../core/result'
-import { AuctionsError } from '../../core/auctions.error'
-import { Auction, AuctionID, auctionStatuses } from '../domain/auction'
+import { AuctionsError } from '@core/auctions.error'
+import { Result, left, right } from '@core/result'
 
-import { CreateAuctionRequest } from '../user-cases/create-auction/create-auction.request'
-import { CreateAuctionError } from '../user-cases/create-auction/create-auction.error'
-import { AuctionPlaceBidError } from '../user-cases/place-bid/auction-place-bid.error'
-import { AuctionPlaceBidRequest } from '../user-cases/place-bid/auction-place-bid.request'
-import { CreateAuctionPort } from '../user-cases/create-auction/create-auction.port'
-import { GetAuctionPort } from '../user-cases/get-auction/get-auction.port'
-import { AuctionNotFoundError } from '../user-cases/get-auction/auction-not-found.error'
-import { GetAuctionsByStatusPort } from '../user-cases/get-auctions-by-status/get-auctions-by-status.port'
-import { AuctionPlaceBidPort } from '../user-cases/place-bid/auction-place-bid.port'
-import { SetAuctionPictureUrlPort } from '../user-cases/upload-auction-picture/set-auction-picture-url.port'
+import { Auction, AuctionID, auctionStatuses } from '@auctions/domain/auction'
+import { CreateAuctionError } from '@auctions/use-cases/create-auction/create-auction.error'
+import { CreateAuctionPort } from '@auctions/use-cases/create-auction/create-auction.port'
+import { CreateAuctionRequest } from '@auctions/use-cases/create-auction/create-auction.request'
+import { AuctionNotFoundError } from '@auctions/use-cases/get-auction/auction-not-found.error'
+import { GetAuctionPort } from '@auctions/use-cases/get-auction/get-auction.port'
+import { GetAuctionsByStatusPort } from '@auctions/use-cases/get-auctions-by-status/get-auctions-by-status.port'
+import { AuctionPlaceBidError } from '@auctions/use-cases/place-bid/auction-place-bid.error'
+import { AuctionPlaceBidPort } from '@auctions/use-cases/place-bid/auction-place-bid.port'
+import { AuctionPlaceBidRequest } from '@auctions/use-cases/place-bid/auction-place-bid.request'
+import { SetAuctionPictureUrlPort } from '@auctions/use-cases/upload-auction-picture/set-auction-picture-url.port'
 
 /**
  * acts as "template" for an infrastructure

@@ -19,6 +19,26 @@
     "incremental": true,
     "target": "esnext",
     "module": "esnext",
+    "paths": {
+      "@core/*": [
+        "./src/core/*"
+      ],
+      "@auctions/domain/*": [
+        "./src/auctions/domain/*"
+      ],
+      "@auctions/repositories/*": [
+        "./src/auctions/repositories/*"
+      ],
+      "@auctions/use-cases/*": [
+        "./src/auctions/use-cases/*"
+      ],
+      "@notifications/domain/*": [
+        "./src/notifications/domain/*"
+      ],
+      "@notifications/use-cases/*": [
+        "./src/notifications/use-cases/*"
+      ],
+    },
   },
   "include": [
     "src/**/*"

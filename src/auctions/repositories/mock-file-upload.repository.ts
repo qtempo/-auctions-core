@@ -1,4 +1,4 @@
-import { AuctionID } from '../domain/auction'
+import { AuctionID } from '@auctions/domain/auction'
 import { FileUploadRepository } from './file-upload.repository'
 
 export class MockFileUploadRepository extends FileUploadRepository {

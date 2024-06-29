@@ -1,17 +1,12 @@
-import { UseCase } from '../../../core/base.use-case'
-import { left, right } from '../../../core/result'
-import { AuctionsError } from '../../../core/auctions.error'
-import { Notification } from '../../domain/notification'
+import { UseCase, useCaseHandler } from '@core/base.use-case'
+import { right } from '@core/result'
 
 export class SendNotificationUseCase implements UseCase<Notification, number> {
   constructor() {}
 
   public async execute(request: Notification) {
-    try {
-      request
-      return right(0)
-    } catch (error) {
-      return left(new AuctionsError(`Unexpected error occur: ${(error as Error)['message']}`))
-    }
+    return await useCaseHandler(async () => {
+      return request && right(0)
+    })
   }
 }
