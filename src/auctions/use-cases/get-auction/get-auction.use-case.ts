@@ -1,4 +1,4 @@
-import { AuctionID, Auction } from '@auctions/domain/auction'
+import { AuctionID, Auction } from '@auctions/domain'
 import { UseCase, useCaseHandler } from '@core/base.use-case'
 import { GetAuctionPort } from './get-auction.port'
 

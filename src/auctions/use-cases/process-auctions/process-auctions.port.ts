@@ -1,4 +1,4 @@
-import { Auction, AuctionID } from '@auctions/domain/auction'
+import { Auction, AuctionID } from '@auctions/domain'
 import { Notification } from '@notifications/domain/notification'
 
 export interface ProcessAuctionsPort {

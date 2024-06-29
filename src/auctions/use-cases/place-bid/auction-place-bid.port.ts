@@ -1,4 +1,4 @@
-import { Auction } from '@auctions/domain/auction'
+import { Auction } from '@auctions/domain'
 import { Result } from '@core/result'
 
 import { GetAuctionPort } from '../get-auction/get-auction.port'

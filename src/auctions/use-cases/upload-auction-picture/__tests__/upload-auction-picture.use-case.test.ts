@@ -4,11 +4,11 @@ import { UUID, randomUUID } from 'node:crypto'
 import fs from 'node:fs/promises'
 
 import { AuctionsError } from '@core/auctions.error'
-import { MockAuctionRepository } from '@auctions/repositories/mock-auction.repository'
-import { MockFileUploadRepository } from '@auctions/repositories/mock-file-upload.repository'
+import { MockAuctionRepository, MockFileUploadRepository } from '@auctions/repositories'
 
 import { AuctionUploadPictureError } from '../auction-upload-picture.error'
-import { UploadAuctionPictureRequest, UploadAuctionPictureUseCase } from '../upload-auction-picture.use-case'
+import { UploadAuctionPictureRequest } from '../upload-auction-picture.request'
+import { UploadAuctionPictureUseCase } from '../upload-auction-picture.use-case'
 
 const executeUseCase = async (args: UploadAuctionPictureRequest) => {
   const useCase = new UploadAuctionPictureUseCase(

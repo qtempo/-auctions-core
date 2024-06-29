@@ -1,5 +1,5 @@
 import { Result } from '@core/result'
-import { AuctionID, Auction } from '@auctions/domain/auction'
+import { AuctionID, Auction } from '@auctions/domain'
 import { GetAuctionPort } from '../get-auction/get-auction.port'
 
 export interface SetAuctionPictureUrlPort extends GetAuctionPort {

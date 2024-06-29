@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto'
-import { Auction, AuctionID } from '@auctions/domain/auction'
+import { Auction, AuctionID } from '@auctions/domain'
 import { AuctionPlaceBidRequest } from '@auctions/use-cases/place-bid/auction-place-bid.request'
 import { AuctionRepository } from './auction.repository'
 

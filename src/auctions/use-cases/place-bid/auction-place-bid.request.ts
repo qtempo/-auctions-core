@@ -1,4 +1,4 @@
-import { Auction, AuctionID } from '@auctions/domain/auction'
+import { Auction, AuctionID } from '@auctions/domain'
 
 export type AuctionPlaceBidRequest = Auction['highestBid'] & {
   id: AuctionID

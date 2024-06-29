@@ -1,5 +1,4 @@
 {
-  "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
     "strict": true,
     "preserveConstEnums": true,
@@ -16,18 +15,17 @@
     "downlevelIteration": true,
     "sourceMap": true,
     "outDir": "build",
-    "incremental": true,
     "target": "esnext",
-    "module": "esnext",
+    "module": "CommonJS",
     "paths": {
       "@core/*": [
         "./src/core/*"
       ],
-      "@auctions/domain/*": [
-        "./src/auctions/domain/*"
+      "@auctions/domain": [
+        "./src/auctions/domain"
       ],
-      "@auctions/repositories/*": [
-        "./src/auctions/repositories/*"
+      "@auctions/repositories": [
+        "./src/auctions/repositories"
       ],
       "@auctions/use-cases/*": [
         "./src/auctions/use-cases/*"
@@ -45,6 +43,7 @@
   ],
   "exclude": [
     "node_modules",
-    "build"
+    "build",
+    "dist"
   ]
 }

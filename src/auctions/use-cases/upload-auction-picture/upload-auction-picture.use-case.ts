@@ -1,14 +1,11 @@
 import { left, right } from '@core/result'
-import { Auction } from '@auctions/domain/auction'
+import { Auction } from '@auctions/domain'
 import { UseCase, useCaseHandler } from '@core/base.use-case'
 
 import { AuctionUploadPictureError } from './auction-upload-picture.error'
 import { SetAuctionPictureUrlPort } from './set-auction-picture-url.port'
 import { UploadPictureServicePort } from './upload-picture-service.port'
-
-export type UploadAuctionPictureRequest = Pick<Auction, 'id' | 'seller'> & {
-  pictureBase64: string
-}
+import { UploadAuctionPictureRequest } from './upload-auction-picture.request'
 
 export class UploadAuctionPictureUseCase implements UseCase<UploadAuctionPictureRequest, Auction> {
   constructor(

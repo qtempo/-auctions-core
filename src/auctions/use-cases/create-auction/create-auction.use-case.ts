@@ -1,5 +1,5 @@
 import { left, right } from '@core/result'
-import { Auction } from '@auctions/domain/auction'
+import { Auction } from '@auctions/domain'
 import { UseCase, useCaseHandler } from '@core/base.use-case'
 import { CreateAuctionPort } from './create-auction.port'
 import { CreateAuctionRequest } from './create-auction.request'

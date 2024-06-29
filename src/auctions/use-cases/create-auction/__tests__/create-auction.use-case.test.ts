@@ -1,7 +1,7 @@
 import { describe, it, mock, Mock } from 'node:test'
 import { ok } from 'assert'
 
-import { MockAuctionRepository } from '@auctions/repositories/mock-auction.repository'
+import { MockAuctionRepository } from '@auctions/repositories'
 import { CreateAuctionError } from '../create-auction.error'
 import { CreateAuctionRequest } from '../create-auction.request'
 import { CreateAuctionUseCase } from '../create-auction.use-case'
