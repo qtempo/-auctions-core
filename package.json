@@ -1,0 +1,17 @@
+{
+  "scripts": {
+    "build": "tsc --build",
+    "lint": "eslint .",
+    "test": "tsx --test $(find src -type f -name '*.test.ts')"
+  },
+  "devDependencies": {
+    "@stylistic/eslint-plugin": "^2.3.0",
+    "@types/node": "^20.14.8",
+    "@typescript-eslint/parser": "^7.14.1",
+    "tsx": "^4.15.7",
+    "typescript": "^5.5.2"
+  },
+  "dependencies": {
+    "@sweet-monads/either": "^3.3.1"
+  }
+}
