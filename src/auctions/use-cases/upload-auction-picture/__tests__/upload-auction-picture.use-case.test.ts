@@ -7,6 +7,7 @@ import { AuctionsError } from '@core/auctions.error'
 import { MockAuctionRepository } from '@auctions/repositories/mock-auction.repository'
 import { MockFileUploadRepository } from '@auctions/repositories/mock-file-upload.repository'
 
+
 import { AuctionUploadPictureError } from '../auction-upload-picture.error'
 import { UploadAuctionPictureRequest, UploadAuctionPictureUseCase } from '../upload-auction-picture.use-case'
 
