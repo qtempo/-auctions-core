@@ -1,2 +1,2 @@
-# -auctions-core
-Domain logic for the Auctions applicaiton 
+# auctions-core
+Domain logic for the Auctions application
