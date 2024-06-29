@@ -1,5 +1,5 @@
 import { Result } from '@core/result'
-import { Auction } from '@auctions/domain/auction'
+import { Auction } from '@auctions/domain'
 import { CreateAuctionRequest } from './create-auction.request'
 
 export interface CreateAuctionPort {

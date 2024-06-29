@@ -2,8 +2,8 @@ import { describe, mock, it } from 'node:test'
 import { ok } from 'node:assert'
 import { randomUUID } from 'node:crypto'
 
-import { MockAuctionRepository } from '@auctions/repositories/mock-auction.repository'
-import { AuctionNotFoundError } from '@auctions/use-cases/get-auction/auction-not-found.error'
+import { MockAuctionRepository } from '@auctions/repositories'
+import { AuctionNotFoundError } from '@auctions/use-cases/get-auction'
 import { AuctionPlaceBidError } from '../auction-place-bid.error'
 import { PlaceBidUseCase } from '../place-bid.use-case'
 

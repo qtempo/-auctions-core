@@ -3,17 +3,12 @@ import { randomUUID } from 'crypto'
 import { AuctionsError } from '@core/auctions.error'
 import { Result, left, right } from '@core/result'
 
-import { Auction, AuctionID, auctionStatuses } from '@auctions/domain/auction'
-import { CreateAuctionError } from '@auctions/use-cases/create-auction/create-auction.error'
-import { CreateAuctionPort } from '@auctions/use-cases/create-auction/create-auction.port'
-import { CreateAuctionRequest } from '@auctions/use-cases/create-auction/create-auction.request'
-import { AuctionNotFoundError } from '@auctions/use-cases/get-auction/auction-not-found.error'
-import { GetAuctionPort } from '@auctions/use-cases/get-auction/get-auction.port'
-import { GetAuctionsByStatusPort } from '@auctions/use-cases/get-auctions-by-status/get-auctions-by-status.port'
-import { AuctionPlaceBidError } from '@auctions/use-cases/place-bid/auction-place-bid.error'
-import { AuctionPlaceBidPort } from '@auctions/use-cases/place-bid/auction-place-bid.port'
-import { AuctionPlaceBidRequest } from '@auctions/use-cases/place-bid/auction-place-bid.request'
-import { SetAuctionPictureUrlPort } from '@auctions/use-cases/upload-auction-picture/set-auction-picture-url.port'
+import { Auction, AuctionID, auctionStatuses } from '@auctions/domain'
+import { CreateAuctionPort, CreateAuctionError, CreateAuctionRequest } from '@auctions/use-cases/create-auction'
+import { AuctionNotFoundError, GetAuctionPort } from '@auctions/use-cases/get-auction'
+import { GetAuctionsByStatusPort } from '@auctions/use-cases/get-auctions-by-status'
+import { AuctionPlaceBidError, AuctionPlaceBidPort, AuctionPlaceBidRequest } from '@auctions/use-cases/place-bid'
+import { SetAuctionPictureUrlPort } from '@auctions/use-cases/upload-auction-picture'
 
 /**
  * acts as "template" for an infrastructure

@@ -2,8 +2,8 @@ import { randomUUID } from 'node:crypto'
 import { describe, it } from 'node:test'
 import { ok } from 'node:assert'
 
-import { Auction } from '@auctions/domain/auction'
-import { MockAuctionRepository } from '@auctions/repositories/mock-auction.repository'
+import { Auction } from '@auctions/domain'
+import { MockAuctionRepository } from '@auctions/repositories'
 import { AuctionNotFoundError } from '../auction-not-found.error'
 import { GetAuctionUseCase } from '../get-auction.use-case'
 

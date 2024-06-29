@@ -21,6 +21,7 @@ export default [
       'nonblock-statement-body-position': ['error', 'below'],
       'no-multi-spaces': ["error", { 'ignoreEOLComments': false }],
       'no-useless-rename': ['error', { 'ignoreDestructuring': false }],
+      'no-multiple-empty-lines': ["error", { "max": 2, "maxEOF": 0 }],
     }
   }
 ]

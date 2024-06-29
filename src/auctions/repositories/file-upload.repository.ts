@@ -1,5 +1,5 @@
 import { Result, left, right } from '@core/result'
-import { AuctionID } from '@auctions/domain/auction'
+import { AuctionID } from '@auctions/domain'
 import { AuctionUploadPictureError } from '@auctions/use-cases/upload-auction-picture/auction-upload-picture.error'
 import { UploadPictureServicePort } from '@auctions/use-cases/upload-auction-picture/upload-picture-service.port'
 
