@@ -5,6 +5,7 @@
     "source.fixAll.eslint": "always"
   },
   "cSpell.words": [
+    "lcov",
     "nonblock",
     "tsup"
   ],
