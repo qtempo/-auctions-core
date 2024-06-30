@@ -39,7 +39,7 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "<>"
-          git pull --ff-only origin ${{ github.event.pull_request.head.ref }}
+          git pull --no-rebase origin ${{ github.event.pull_request.head.ref }}
           git add -f dist
           git commit -m "apply automated build"
           git push origin HEAD:${{ github.event.pull_request.head.ref }}
