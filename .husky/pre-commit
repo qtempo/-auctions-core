@@ -1,3 +1,4 @@
 #!/usr/bin/env sh
 
-# lint-staged
+yarn lint
+yarn test
