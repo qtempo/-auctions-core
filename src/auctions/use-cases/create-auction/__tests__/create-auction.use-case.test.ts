@@ -37,7 +37,7 @@ describe('create-auction.use-case', async () => {
       const result = await createAuction.execute(createOptions)
 
       ok(result.isLeft(), `createAuction execution must return an "${CreateAuctionError.name}"`)
-      ok(result.value.name + 'q' === CreateAuctionError.name, 'createAuction execution returns wrong error type')
+      ok(result.value.name === CreateAuctionError.name, 'createAuction execution returns wrong error type')
       ok(result.value.message === errorMessage, 'createAuction execution returns wrong error message')
     })
   }
