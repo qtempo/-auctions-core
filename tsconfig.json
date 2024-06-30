@@ -15,8 +15,8 @@
     "downlevelIteration": true,
     "sourceMap": true,
     "outDir": "build",
-    "target": "esnext",
-    "module": "CommonJS",
+    "target": "ESNext",
+    "module": "ESNext",
     "paths": {
       "@core/*": [
         "./src/core/*"

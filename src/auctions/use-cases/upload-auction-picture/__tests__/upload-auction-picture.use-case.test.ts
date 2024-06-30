@@ -1,11 +1,10 @@
+import fs from 'node:fs/promises'
+import { UUID, randomUUID } from 'node:crypto'
 import { describe, it, before } from 'node:test'
 import { ok } from 'node:assert'
-import { UUID, randomUUID } from 'node:crypto'
-import fs from 'node:fs/promises'
 
 import { AuctionsError } from '@core/auctions.error'
 import { MockAuctionRepository, MockFileUploadRepository } from '@auctions/repositories'
-
 
 import { AuctionUploadPictureError } from '../auction-upload-picture.error'
 import { UploadAuctionPictureRequest } from '../upload-auction-picture.request'
@@ -23,7 +22,7 @@ describe('upload-auction-picture.use-case', () => {
   let testPictureBase64 = ''
 
   before(async () => {
-    testPictureBase64 = await fs.readFile(__dirname + '/signal.jpg', { encoding: 'base64' })
+    testPictureBase64 = await fs.readFile(`${import.meta.dirname}/signal.jpg`, { encoding: 'base64' })
   })
 
   it('should fail on auction id verification', async () => {

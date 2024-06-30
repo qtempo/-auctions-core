@@ -5,8 +5,9 @@
   "author": "https://github.com/hyperactivepuss",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/qtempo/auctions-core.git"
+    "url": "https://github.com/qtempo/auctions-core.git"
   },
+  "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -14,7 +15,7 @@
     "postinstall": "husky",
     "build": "tsup --dts",
     "lint": "eslint .",
-    "test": "bash run-tests.sh"
+    "test": "bash ./utils/test-runner/run.sh"
   },
   "devDependencies": {
     "@stylistic/eslint-plugin": "^2.3.0",
