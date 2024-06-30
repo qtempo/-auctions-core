@@ -5,5 +5,4 @@ export * from '@auctions/use-cases/get-auctions-by-status'
 export * from '@auctions/use-cases/place-bid'
 export * from '@auctions/use-cases/upload-auction-picture'
 
-import { AuctionRepository, FileUploadRepository } from '@auctions/repositories'
-export { AuctionRepository, FileUploadRepository }
+export { AuctionRepository, FileUploadRepository } from '@auctions/repositories'
