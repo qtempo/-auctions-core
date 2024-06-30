@@ -11,16 +11,19 @@
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
+    "postinstall": "husky",
     "build": "tsup --dts",
     "lint": "eslint .",
-    "test": "node -r ts-node/register -r tsconfig-paths/register --test ./src/**/*.test.ts",
-    "test:cov": "c8 -r --check-coverage --lines 100 --functions 100 --branches 100 --statements 100 --reporter=lcov node -r ts-node/register -r tsconfig-paths/register --test ./src/**/*.test.ts"
+    "test": "bash run-tests.sh"
   },
   "devDependencies": {
     "@stylistic/eslint-plugin": "^2.3.0",
     "@types/node": "^20.14.8",
     "@typescript-eslint/parser": "^7.14.1",
     "c8": "^10.1.2",
+    "eslint": "^9.6.0",
+    "husky": "^9.0.11",
+    "postinstall": "^0.10.3",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "tsup": "^8.1.0",
