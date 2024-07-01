@@ -1,7 +1,52 @@
-// src/auctions/domain/auction.ts
+var __defProp = Object.defineProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+
+// src/core/domain/auction.ts
 var auctionStatuses = ["OPEN", "CLOSED"];
 
-// src/auctions/use-cases/create-auction/create-auction.error.ts
+// src/modules/user/index.ts
+var user_exports = {};
+__export(user_exports, {
+  AuctionNotFoundError: () => AuctionNotFoundError,
+  AuctionPlaceBidError: () => AuctionPlaceBidError,
+  CreateAuctionError: () => CreateAuctionError,
+  CreateAuctionUseCase: () => CreateAuctionUseCase,
+  GetAuctionUseCase: () => GetAuctionUseCase,
+  GetAuctionsByStatusUseCase: () => GetAuctionsByStatusUseCase,
+  MockUploadAuctionPictureRepository: () => MockUploadAuctionPictureRepository,
+  PlaceBidUseCase: () => PlaceBidUseCase,
+  UploadAuctionPictureError: () => UploadAuctionPictureError,
+  UploadAuctionPictureRepository: () => UploadAuctionPictureRepository,
+  UploadAuctionPictureUseCase: () => UploadAuctionPictureUseCase
+});
+
+// src/core/result.ts
+import { left, right } from "@sweet-monads/either";
+
+// src/modules/user/repositories/upload-auction-picture.repository.ts
+var UploadAuctionPictureRepository = class {
+  async upload(id, pictureBase64) {
+    const base64string = pictureBase64.replace(/^data:image\/\w+;base64,/, "");
+    const buffer = Buffer.from(base64string, "base64");
+    if (buffer.toString("base64") !== base64string) {
+      return left(new UploadAuctionPictureError("Invalid base64 image."));
+    }
+    const pictureUrl = await this.persistPicture(id, buffer);
+    return right(pictureUrl);
+  }
+};
+
+// src/modules/user/repositories/mock-upload-auction-picture.repository.ts
+var MockUploadAuctionPictureRepository = class extends UploadAuctionPictureRepository {
+  persistPicture(id, pictureBuffer) {
+    return Promise.resolve(`${id}_${pictureBuffer}`);
+  }
+};
+
+// src/modules/user/use-cases/create-auction/create-auction.error.ts
 var CreateAuctionError = class _CreateAuctionError extends Error {
   name = "CreateAuctionError";
   constructor(message) {
@@ -14,9 +59,6 @@ var CreateAuctionError = class _CreateAuctionError extends Error {
     return new _CreateAuctionError(`auction's "seller" not provided`);
   }
 };
-
-// src/core/result.ts
-import { left, right } from "@sweet-monads/either";
 
 // src/core/auctions.error.ts
 var AuctionsError = class extends Error {
@@ -33,7 +75,7 @@ var useCaseHandler = async (fn) => {
   }
 };
 
-// src/auctions/use-cases/create-auction/create-auction.use-case.ts
+// src/modules/user/use-cases/create-auction/create-auction.use-case.ts
 var CreateAuctionUseCase = class {
   constructor(createAuctionPort) {
     this.createAuctionPort = createAuctionPort;
@@ -49,7 +91,7 @@ var CreateAuctionUseCase = class {
   }
 };
 
-// src/auctions/use-cases/get-auction/auction-not-found.error.ts
+// src/modules/user/use-cases/get-auction/auction-not-found.error.ts
 var AuctionNotFoundError = class extends Error {
   name = "AuctionNotFoundError";
   constructor(id) {
@@ -57,7 +99,7 @@ var AuctionNotFoundError = class extends Error {
   }
 };
 
-// src/auctions/use-cases/get-auction/get-auction.use-case.ts
+// src/modules/user/use-cases/get-auction/get-auction.use-case.ts
 var GetAuctionUseCase = class {
   constructor(getAuctionPort) {
     this.getAuctionPort = getAuctionPort;
@@ -69,7 +111,7 @@ var GetAuctionUseCase = class {
   }
 };
 
-// src/auctions/use-cases/get-auctions-by-status/get-auctions-by-status.use-case.ts
+// src/modules/user/use-cases/get-auctions-by-status/get-auctions-by-status.use-case.ts
 var GetAuctionsByStatusUseCase = class {
   constructor(getByStatusPort) {
     this.getByStatusPort = getByStatusPort;
@@ -81,12 +123,12 @@ var GetAuctionsByStatusUseCase = class {
   }
 };
 
-// src/auctions/use-cases/place-bid/auction-place-bid.error.ts
+// src/modules/user/use-cases/place-bid/auction-place-bid.error.ts
 var AuctionPlaceBidError = class extends Error {
   name = "AuctionPlaceBidError";
 };
 
-// src/auctions/use-cases/place-bid/place-bid.use-case.ts
+// src/modules/user/use-cases/place-bid/place-bid.use-case.ts
 var PlaceBidUseCase = class {
   constructor(placeBidPort) {
     this.placeBidPort = placeBidPort;
@@ -106,12 +148,12 @@ var PlaceBidUseCase = class {
   }
 };
 
-// src/auctions/use-cases/upload-auction-picture/auction-upload-picture.error.ts
-var AuctionUploadPictureError = class extends Error {
-  name = "AuctionUploadPictureError";
+// src/modules/user/use-cases/upload-auction-picture/upload-auction-picture.error.ts
+var UploadAuctionPictureError = class extends Error {
+  name = "UploadAuctionPictureError";
 };
 
-// src/auctions/use-cases/upload-auction-picture/upload-auction-picture.use-case.ts
+// src/modules/user/use-cases/upload-auction-picture/upload-auction-picture.use-case.ts
 var UploadAuctionPictureUseCase = class {
   constructor(auctionPort, uploadPictureService) {
     this.auctionPort = auctionPort;
@@ -123,8 +165,8 @@ var UploadAuctionPictureUseCase = class {
       if (auctionResult.isLeft())
         return left(auctionResult.value);
       if (auctionResult.value.seller !== seller)
-        return left(new AuctionUploadPictureError("Only seller allowed to perform this action."));
-      const uploadResult = await this.uploadPictureService.uploadPicture(id, pictureBase64);
+        return left(new UploadAuctionPictureError("Only seller allowed to perform this action."));
+      const uploadResult = await this.uploadPictureService.upload(id, pictureBase64);
       if (uploadResult.isLeft())
         return left(uploadResult.value);
       const updatedResult = await this.auctionPort.setPictureUrl(id, uploadResult.value);
@@ -135,7 +177,7 @@ var UploadAuctionPictureUseCase = class {
   }
 };
 
-// src/auctions/repositories/auction.repository.ts
+// src/core/repositories/auction.repository.ts
 import { randomUUID } from "crypto";
 var AuctionRepository = class {
   constructor(_auction) {
@@ -217,30 +259,8 @@ var AuctionRepository = class {
     return right(auction);
   }
 };
-
-// src/auctions/repositories/file-upload.repository.ts
-var FileUploadRepository = class {
-  async uploadPicture(id, pictureBase64) {
-    const base64string = pictureBase64.replace(/^data:image\/\w+;base64,/, "");
-    const buffer = Buffer.from(base64string, "base64");
-    if (buffer.toString("base64") !== base64string) {
-      return left(new AuctionUploadPictureError("Invalid base64 image."));
-    }
-    const pictureUrl = await this.persistPicture(id, buffer);
-    return right(pictureUrl);
-  }
-};
 export {
-  AuctionNotFoundError,
-  AuctionPlaceBidError,
   AuctionRepository,
-  AuctionUploadPictureError,
-  CreateAuctionError,
-  CreateAuctionUseCase,
-  FileUploadRepository,
-  GetAuctionUseCase,
-  GetAuctionsByStatusUseCase,
-  PlaceBidUseCase,
-  UploadAuctionPictureUseCase,
+  user_exports as UserModule,
   auctionStatuses
 };
