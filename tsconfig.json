@@ -21,20 +21,17 @@
       "@core/*": [
         "./src/core/*"
       ],
-      "@auctions/domain": [
-        "./src/auctions/domain"
+      "@user-module": [
+        "./src/modules/user"
       ],
-      "@auctions/repositories": [
-        "./src/auctions/repositories"
+      "@user-module/*": [
+        "./src/modules/user/*"
       ],
-      "@auctions/use-cases/*": [
-        "./src/auctions/use-cases/*"
+      "@automatic-module": [
+        "./src/modules/automatic"
       ],
-      "@notifications/domain/*": [
-        "./src/notifications/domain/*"
-      ],
-      "@notifications/use-cases/*": [
-        "./src/notifications/use-cases/*"
+      "@automatic-module/*": [
+        "./src/modules/automatic/*"
       ],
     },
   },
