@@ -19,14 +19,23 @@ interface Auction {
     };
 }
 
+type Result<E extends Error, T> = Either<E, T>;
+
+declare abstract class UploadAuctionPictureRepository implements UploadAuctionPictureServicePort {
+    protected abstract persistPicture(id: AuctionID, pictureBuffer: Buffer): Promise<string>;
+    upload(id: AuctionID, pictureBase64: string): Promise<Result<UploadAuctionPictureError, string>>;
+}
+
+declare class MockUploadAuctionPictureRepository extends UploadAuctionPictureRepository {
+    protected persistPicture(id: AuctionID, pictureBuffer: Buffer): Promise<string>;
+}
+
 declare class CreateAuctionError extends Error {
     name: "CreateAuctionError";
     constructor(message: string);
     static titleValidationFail(): CreateAuctionError;
     static sellerValidationFail(): CreateAuctionError;
 }
-
-type Result<E extends Error, T> = Either<E, T>;
 
 type CreateAuctionRequest = Pick<Auction, 'title' | 'seller'>;
 
@@ -90,16 +99,16 @@ declare class PlaceBidUseCase implements UseCase<AuctionPlaceBidRequest, Auction
     execute(request: AuctionPlaceBidRequest): Promise<Result<Error, Auction>>;
 }
 
-declare class AuctionUploadPictureError extends Error {
-    name: "AuctionUploadPictureError";
+declare class UploadAuctionPictureError extends Error {
+    name: "UploadAuctionPictureError";
 }
 
 interface SetAuctionPictureUrlPort extends GetAuctionPort {
     setPictureUrl(id: AuctionID, pictureUrl: string): Promise<Result<Error, Auction>> | Result<Error, Auction>;
 }
 
-interface UploadPictureServicePort {
-    uploadPicture(id: AuctionID, pictureBase64: string): Promise<Result<Error, string>> | Result<Error, string>;
+interface UploadAuctionPictureServicePort {
+    upload(id: AuctionID, pictureBase64: string): Promise<Result<Error, string>> | Result<Error, string>;
 }
 
 type UploadAuctionPictureRequest = Pick<Auction, 'id' | 'seller'> & {
@@ -109,8 +118,43 @@ type UploadAuctionPictureRequest = Pick<Auction, 'id' | 'seller'> & {
 declare class UploadAuctionPictureUseCase implements UseCase<UploadAuctionPictureRequest, Auction> {
     private readonly auctionPort;
     private readonly uploadPictureService;
-    constructor(auctionPort: SetAuctionPictureUrlPort, uploadPictureService: UploadPictureServicePort);
+    constructor(auctionPort: SetAuctionPictureUrlPort, uploadPictureService: UploadAuctionPictureServicePort);
     execute({ id, seller, pictureBase64 }: UploadAuctionPictureRequest): Promise<Result<Error, Auction>>;
+}
+
+type index_AuctionNotFoundError = AuctionNotFoundError;
+declare const index_AuctionNotFoundError: typeof AuctionNotFoundError;
+type index_AuctionPlaceBidError = AuctionPlaceBidError;
+declare const index_AuctionPlaceBidError: typeof AuctionPlaceBidError;
+type index_AuctionPlaceBidPort = AuctionPlaceBidPort;
+type index_AuctionPlaceBidRequest = AuctionPlaceBidRequest;
+type index_CreateAuctionError = CreateAuctionError;
+declare const index_CreateAuctionError: typeof CreateAuctionError;
+type index_CreateAuctionPort = CreateAuctionPort;
+type index_CreateAuctionRequest = CreateAuctionRequest;
+type index_CreateAuctionUseCase = CreateAuctionUseCase;
+declare const index_CreateAuctionUseCase: typeof CreateAuctionUseCase;
+type index_GetAuctionPort = GetAuctionPort;
+type index_GetAuctionUseCase = GetAuctionUseCase;
+declare const index_GetAuctionUseCase: typeof GetAuctionUseCase;
+type index_GetAuctionsByStatusPort = GetAuctionsByStatusPort;
+type index_GetAuctionsByStatusUseCase = GetAuctionsByStatusUseCase;
+declare const index_GetAuctionsByStatusUseCase: typeof GetAuctionsByStatusUseCase;
+type index_MockUploadAuctionPictureRepository = MockUploadAuctionPictureRepository;
+declare const index_MockUploadAuctionPictureRepository: typeof MockUploadAuctionPictureRepository;
+type index_PlaceBidUseCase = PlaceBidUseCase;
+declare const index_PlaceBidUseCase: typeof PlaceBidUseCase;
+type index_SetAuctionPictureUrlPort = SetAuctionPictureUrlPort;
+type index_UploadAuctionPictureError = UploadAuctionPictureError;
+declare const index_UploadAuctionPictureError: typeof UploadAuctionPictureError;
+type index_UploadAuctionPictureRepository = UploadAuctionPictureRepository;
+declare const index_UploadAuctionPictureRepository: typeof UploadAuctionPictureRepository;
+type index_UploadAuctionPictureRequest = UploadAuctionPictureRequest;
+type index_UploadAuctionPictureServicePort = UploadAuctionPictureServicePort;
+type index_UploadAuctionPictureUseCase = UploadAuctionPictureUseCase;
+declare const index_UploadAuctionPictureUseCase: typeof UploadAuctionPictureUseCase;
+declare namespace index {
+  export { index_AuctionNotFoundError as AuctionNotFoundError, index_AuctionPlaceBidError as AuctionPlaceBidError, type index_AuctionPlaceBidPort as AuctionPlaceBidPort, type index_AuctionPlaceBidRequest as AuctionPlaceBidRequest, index_CreateAuctionError as CreateAuctionError, type index_CreateAuctionPort as CreateAuctionPort, type index_CreateAuctionRequest as CreateAuctionRequest, index_CreateAuctionUseCase as CreateAuctionUseCase, type index_GetAuctionPort as GetAuctionPort, index_GetAuctionUseCase as GetAuctionUseCase, type index_GetAuctionsByStatusPort as GetAuctionsByStatusPort, index_GetAuctionsByStatusUseCase as GetAuctionsByStatusUseCase, index_MockUploadAuctionPictureRepository as MockUploadAuctionPictureRepository, index_PlaceBidUseCase as PlaceBidUseCase, type index_SetAuctionPictureUrlPort as SetAuctionPictureUrlPort, index_UploadAuctionPictureError as UploadAuctionPictureError, index_UploadAuctionPictureRepository as UploadAuctionPictureRepository, type index_UploadAuctionPictureRequest as UploadAuctionPictureRequest, type index_UploadAuctionPictureServicePort as UploadAuctionPictureServicePort, index_UploadAuctionPictureUseCase as UploadAuctionPictureUseCase };
 }
 
 declare class AuctionsError extends Error {
@@ -133,9 +177,4 @@ declare abstract class AuctionRepository implements CreateAuctionPort, GetAuctio
     setPictureUrl(id: AuctionID, pictureUrl: string): Promise<Result<Error, Auction>>;
 }
 
-declare abstract class FileUploadRepository implements UploadPictureServicePort {
-    protected abstract persistPicture(id: AuctionID, pictureBuffer: Buffer): Promise<string>;
-    uploadPicture(id: AuctionID, pictureBase64: string): Promise<Result<AuctionUploadPictureError, string>>;
-}
-
-export { type Auction, type AuctionBidderEmail, type AuctionID, AuctionNotFoundError, AuctionPlaceBidError, type AuctionPlaceBidPort, type AuctionPlaceBidRequest, AuctionRepository, type AuctionSellerEmail, AuctionUploadPictureError, CreateAuctionError, type CreateAuctionPort, type CreateAuctionRequest, CreateAuctionUseCase, FileUploadRepository, type GetAuctionPort, GetAuctionUseCase, type GetAuctionsByStatusPort, GetAuctionsByStatusUseCase, PlaceBidUseCase, type SetAuctionPictureUrlPort, type UploadAuctionPictureRequest, UploadAuctionPictureUseCase, type UploadPictureServicePort, auctionStatuses };
+export { type Auction, type AuctionBidderEmail, type AuctionID, AuctionRepository, type AuctionSellerEmail, index as UserModule, auctionStatuses };
