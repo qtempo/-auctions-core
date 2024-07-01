@@ -1,4 +1,4 @@
-import { AuctionID } from '@core/domain'
+import { AuctionID } from '@core/entities'
 
 export class AuctionNotFoundError extends Error {
   name = 'AuctionNotFoundError' as const

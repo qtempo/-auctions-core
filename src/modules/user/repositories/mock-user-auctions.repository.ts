@@ -1,9 +1,9 @@
 import { randomUUID } from 'crypto'
-import { Auction, AuctionID } from '@core/domain'
-import { AuctionPlaceBidRequest } from '../../modules/user'
-import { AuctionRepository } from './auction.repository'
+import { Auction, AuctionID } from '@core/entities'
+import { AuctionPlaceBidRequest } from '..'
+import { UserAuctionsRepository } from './user-auctions.repository'
 
-export class MockAuctionRepository extends AuctionRepository {
+export class MockUserAuctionsRepository extends UserAuctionsRepository {
   private createPatchAuction(patch: Partial<Auction>): Auction {
     const now = new Date()
     const endDate = new Date()

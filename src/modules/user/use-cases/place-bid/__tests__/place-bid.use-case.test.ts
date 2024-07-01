@@ -2,7 +2,7 @@ import { describe, mock, it } from 'node:test'
 import { ok } from 'node:assert'
 import { randomUUID } from 'node:crypto'
 
-import { MockAuctionRepository } from '@core/repositories'
+import { MockUserAuctionsRepository } from '@user-module'
 import { AuctionNotFoundError } from '../../get-auction'
 import { AuctionPlaceBidError } from '../auction-place-bid.error'
 import { PlaceBidUseCase } from '../place-bid.use-case'
@@ -10,7 +10,7 @@ import { PlaceBidUseCase } from '../place-bid.use-case'
 describe('place-bid.use-case', () => {
   it('should fail on same bid', async () => {
     const email = 'tmp@tmp'
-    const adapter = new MockAuctionRepository()
+    const adapter = new MockUserAuctionsRepository()
     adapter.persistBid = mock.fn()
     adapter.queryById = () =>
       Promise.resolve({
@@ -41,7 +41,7 @@ describe('place-bid.use-case', () => {
 
   it('should fail on same bidder', async () => {
     const email = 'tmp@tmp'
-    const adapter = new MockAuctionRepository()
+    const adapter = new MockUserAuctionsRepository()
     adapter.persistBid = mock.fn()
     adapter.queryById = () =>
       Promise.resolve({

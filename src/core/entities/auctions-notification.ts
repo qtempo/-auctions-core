@@ -1,4 +1,4 @@
-import { AuctionBidderEmail, AuctionSellerEmail } from '@core/domain'
+import { AuctionBidderEmail, AuctionSellerEmail } from './auction'
 
 export interface AuctionsNotification {
   recipient: AuctionSellerEmail | AuctionBidderEmail

@@ -1,9 +1,9 @@
 import { randomUUID } from 'crypto'
 
-import { AuctionsError } from '@core/auctions.error'
 import { Result, left, right } from '@core/result'
+import { Auction, AuctionID, auctionStatuses } from '@core/entities'
+import { AuctionsError } from '@core/auctions.error'
 
-import { Auction, AuctionID, auctionStatuses } from '@core/domain'
 import { CreateAuctionError, CreateAuctionPort, CreateAuctionRequest } from '@user-module/use-cases/create-auction'
 import { AuctionNotFoundError, GetAuctionPort } from '@user-module/use-cases/get-auction'
 import { GetAuctionsByStatusPort } from '@user-module/use-cases/get-auctions-by-status'
@@ -11,10 +11,10 @@ import { AuctionPlaceBidError, AuctionPlaceBidPort, AuctionPlaceBidRequest } fro
 import { SetAuctionPictureUrlPort } from '@user-module/use-cases/upload-auction-picture'
 
 /**
- * acts as "template" for an infrastructure
- * and as "ports" for use cases
+ * acts as a "template" for an infrastructure
+ * and as "ports" for use-cases
  */
-export abstract class AuctionRepository
+export abstract class UserAuctionsRepository
 implements CreateAuctionPort, GetAuctionPort, GetAuctionsByStatusPort, AuctionPlaceBidPort, SetAuctionPictureUrlPort {
   constructor(private _auction?: Auction) { }
 

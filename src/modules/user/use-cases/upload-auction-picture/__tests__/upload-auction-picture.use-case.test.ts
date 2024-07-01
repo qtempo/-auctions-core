@@ -4,7 +4,7 @@ import { describe, it, before } from 'node:test'
 import { ok } from 'node:assert'
 
 import { AuctionsError } from '@core/auctions.error'
-import { MockAuctionRepository} from '@core/repositories'
+import { MockUserAuctionsRepository } from '@user-module'
 import { MockUploadAuctionPictureRepository } from '../../../repositories'
 
 import { UploadAuctionPictureError } from '../upload-auction-picture.error'
@@ -13,7 +13,7 @@ import { UploadAuctionPictureUseCase } from '../upload-auction-picture.use-case'
 
 const executeUseCase = async (args: UploadAuctionPictureRequest) => {
   const useCase = new UploadAuctionPictureUseCase(
-    new MockAuctionRepository(),
+    new MockUserAuctionsRepository(),
     new MockUploadAuctionPictureRepository(),
   )
   return await useCase.execute(args)

@@ -1,8 +1,6 @@
-import { Auction, AuctionID } from '@core/domain'
-import { AuctionsNotification } from '@automatic-module'
+import { Auction, AuctionID } from '@core/entities'
 
 export interface ProcessAuctionsPort {
   getExpiredAuctions(): Promise<Auction[]>
   closeAuction(id: AuctionID): Promise<void>
-  sendNotification(notification: AuctionsNotification): Promise<void>
 }

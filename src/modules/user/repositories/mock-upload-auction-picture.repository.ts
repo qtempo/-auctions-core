@@ -1,4 +1,4 @@
-import { AuctionID } from '@core/domain'
+import { AuctionID } from '@core/entities'
 import { UploadAuctionPictureRepository } from './upload-auction-picture.repository'
 
 export class MockUploadAuctionPictureRepository extends UploadAuctionPictureRepository {

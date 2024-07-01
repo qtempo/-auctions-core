@@ -1,4 +1,4 @@
-export * from '@core/domain'
+export * from '@core/entities'
 export * as UserModule from '@user-module'
-
-export { AuctionRepository } from '@core/repositories'
+export * as AutomaticModule from '@automatic-module'
+export * as NotificationModule from '@notification-module'

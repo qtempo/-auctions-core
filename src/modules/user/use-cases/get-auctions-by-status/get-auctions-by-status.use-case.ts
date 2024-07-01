@@ -1,5 +1,5 @@
 import { UseCase, useCaseHandler } from '@core/base.use-case'
-import { Auction } from '@core/domain'
+import { Auction } from '@core/entities'
 import { GetAuctionsByStatusPort } from './get-auctions-by-status.port'
 
 export class GetAuctionsByStatusUseCase implements UseCase<Auction['status'], Auction[]> {

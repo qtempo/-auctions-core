@@ -1,5 +1,5 @@
 import { Result, left, right } from '@core/result'
-import { AuctionID } from '@core/domain'
+import { AuctionID } from '@core/entities'
 import { UploadAuctionPictureError, UploadAuctionPictureServicePort } from '..'
 
 export abstract class UploadAuctionPictureRepository implements UploadAuctionPictureServicePort {

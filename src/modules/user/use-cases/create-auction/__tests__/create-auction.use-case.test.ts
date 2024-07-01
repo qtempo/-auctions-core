@@ -1,7 +1,7 @@
 import { describe, it, mock, Mock } from 'node:test'
 import { ok } from 'assert'
 
-import { MockAuctionRepository } from '@core/repositories'
+import { MockUserAuctionsRepository } from '@user-module'
 import { CreateAuctionError } from '../create-auction.error'
 import { CreateAuctionRequest } from '../create-auction.request'
 import { CreateAuctionUseCase } from '../create-auction.use-case'
@@ -32,7 +32,7 @@ const createErrorCases: Array<{
 describe('create-auction.use-case', async () => {
   for (const { name, createOptions, errorMessage } of createErrorCases) {
     it(name, async () => {
-      const adapter = new MockAuctionRepository()
+      const adapter = new MockUserAuctionsRepository()
       const createAuction = new CreateAuctionUseCase(adapter)
       const result = await createAuction.execute(createOptions)
 
@@ -45,7 +45,7 @@ describe('create-auction.use-case', async () => {
   it('should create an auction', async () => {
     const title = 'title'
     const seller = 'seller'
-    const adapter = new MockAuctionRepository()
+    const adapter = new MockUserAuctionsRepository()
     adapter.persist = mock.fn()
 
     const createAuction = new CreateAuctionUseCase(adapter)

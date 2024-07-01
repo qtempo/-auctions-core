@@ -33,6 +33,12 @@
       "@automatic-module/*": [
         "./src/modules/automatic/*"
       ],
+      "@notification-module": [
+        "./src/modules/notification"
+      ],
+      "@notification-module/*": [
+        "./src/modules/notification/*"
+      ],
     },
   },
   "include": [

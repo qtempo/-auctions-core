@@ -2,14 +2,14 @@ import { randomUUID } from 'node:crypto'
 import { describe, it } from 'node:test'
 import { ok } from 'node:assert'
 
-import { Auction } from '@core/domain'
-import { MockAuctionRepository } from '@core/repositories'
+import { Auction } from '@core/entities'
+import { MockUserAuctionsRepository } from '@user-module'
 import { AuctionNotFoundError } from '../auction-not-found.error'
 import { GetAuctionUseCase } from '../get-auction.use-case'
 
 describe('get-auction.use-case', async () => {
   it('should return NotFound error', async () => {
-    const adapter = new MockAuctionRepository()
+    const adapter = new MockUserAuctionsRepository()
     adapter.queryById = () => Promise.resolve({ id: '' } as unknown as Auction)
     const getAuction = new GetAuctionUseCase(adapter)
     const uuid = randomUUID()

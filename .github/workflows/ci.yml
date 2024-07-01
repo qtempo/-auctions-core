@@ -40,4 +40,4 @@ jobs:
           git pull --no-rebase --allow-unrelated-histories origin ${{ github.event.pull_request.head.ref }}
           git add -f dist
           git commit -m "apply automated build"
-          git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          git push origin -f HEAD:${{ github.event.pull_request.head.ref }}

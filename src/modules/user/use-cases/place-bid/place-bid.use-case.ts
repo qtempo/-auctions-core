@@ -1,5 +1,5 @@
 import { left, right } from '@core/result'
-import { Auction } from '@core/domain'
+import { Auction } from '@core/entities'
 import { UseCase, useCaseHandler } from '@core/base.use-case'
 
 import { AuctionPlaceBidPort } from './auction-place-bid.port'
