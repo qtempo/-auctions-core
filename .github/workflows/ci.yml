@@ -4,8 +4,6 @@
 name: CI
 
 on:
-  push:
-    branches: ["main"]
   pull_request:
     branches: ["main"]
 
@@ -23,7 +21,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: "yarn"
@@ -42,4 +40,4 @@ jobs:
           git pull --no-rebase --allow-unrelated-histories origin ${{ github.event.pull_request.head.ref }}
           git add -f dist
           git commit -m "apply automated build"
-          git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          git push origin -f HEAD:${{ github.event.pull_request.head.ref }}

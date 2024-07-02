@@ -1,8 +1,4 @@
-export * from '@auctions/domain'
-export * from '@auctions/use-cases/create-auction'
-export * from '@auctions/use-cases/get-auction'
-export * from '@auctions/use-cases/get-auctions-by-status'
-export * from '@auctions/use-cases/place-bid'
-export * from '@auctions/use-cases/upload-auction-picture'
-
-export { AuctionRepository, FileUploadRepository } from '@auctions/repositories'
+export * from '@core/entities'
+export * as UserModule from '@user-module'
+export * as AutomaticModule from '@automatic-module'
+export * as NotificationModule from '@notification-module'

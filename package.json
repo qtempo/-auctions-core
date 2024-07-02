@@ -15,7 +15,8 @@
     "postinstall": "husky",
     "build": "tsup --dts",
     "lint": "eslint .",
-    "test": "bash ./utils/test-runner/run.sh"
+    "test": "bash ./utils/test-runner/run.sh",
+    "test:coverage": "bash ./utils/test-runner/run-coverage.sh"
   },
   "devDependencies": {
     "@stylistic/eslint-plugin": "^2.3.0",
