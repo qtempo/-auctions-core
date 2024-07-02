@@ -19,10 +19,19 @@ interface Auction {
     };
 }
 
-interface AuctionsNotification {
-    recipient: AuctionSellerEmail | AuctionBidderEmail;
-    subject: string;
-    body: string;
+interface DomainEvent {
+}
+
+declare class AuctionsNotification implements DomainEvent {
+    private readonly recipient;
+    private readonly subject;
+    private readonly body;
+    constructor(recipient: AuctionSellerEmail | AuctionBidderEmail, subject: string, body: string);
+    get(): {
+        recipient: string;
+        subject: string;
+        body: string;
+    };
 }
 
 type Result<E extends Error, T> = Either<E, T>;
@@ -198,14 +207,13 @@ declare namespace index$2 {
 
 interface ProcessAuctionsPort {
     getExpiredAuctions(): Promise<Auction[]>;
-    closeAuction(id: AuctionID): Promise<void>;
+    closeAuction(auction: Auction): Promise<void>;
 }
 
 declare class ProcessAuctionsUseCase implements UseCase<void, number> {
     private readonly port;
     constructor(port: ProcessAuctionsPort);
     execute(): Promise<Result<Error, number>>;
-    private closeAuction;
 }
 
 type index$1_ProcessAuctionsPort = ProcessAuctionsPort;
@@ -232,4 +240,4 @@ declare namespace index {
   export { type index_SendNotificationPort as SendNotificationPort, index_SendNotificationUseCase as SendNotificationUseCase };
 }
 
-export { type Auction, type AuctionBidderEmail, type AuctionID, type AuctionSellerEmail, type AuctionsNotification, index$1 as AutomaticModule, index as NotificationModule, index$2 as UserModule, auctionStatuses };
+export { type Auction, type AuctionBidderEmail, type AuctionID, type AuctionSellerEmail, AuctionsNotification, index$1 as AutomaticModule, index as NotificationModule, index$2 as UserModule, auctionStatuses };

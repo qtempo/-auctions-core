@@ -7,6 +7,22 @@ var __export = (target, all) => {
 // src/core/entities/auction.ts
 var auctionStatuses = ["OPEN", "CLOSED"];
 
+// src/core/entities/auctions-notification.ts
+var AuctionsNotification = class {
+  constructor(recipient, subject, body) {
+    this.recipient = recipient;
+    this.subject = subject;
+    this.body = body;
+  }
+  get() {
+    return {
+      recipient: this.recipient,
+      subject: this.subject,
+      body: this.body
+    };
+  }
+};
+
 // src/modules/user/index.ts
 var user_exports = {};
 __export(user_exports, {
@@ -317,16 +333,10 @@ var ProcessAuctionsUseCase = class {
   async execute() {
     return await useCaseHandler(async () => {
       const expiredAuctions = await this.port.getExpiredAuctions();
-      const closePromises = expiredAuctions.map((a) => this.closeAuction(a));
+      const closePromises = expiredAuctions.map((a) => this.port.closeAuction(a));
       await Promise.all(closePromises);
       return right(expiredAuctions.length);
     });
-  }
-  async closeAuction(auction) {
-    const { id, title, seller, highestBid } = auction;
-    await this.port.closeAuction(id);
-    if (highestBid.amount === 0) {
-    }
   }
 };
 
@@ -336,7 +346,7 @@ __export(notification_exports, {
   SendNotificationUseCase: () => SendNotificationUseCase
 });
 
-// src/modules/notification/use-cases/send-notification/send-notification.use.case.ts
+// src/modules/notification/send-notification/send-notification.use.case.ts
 var SendNotificationUseCase = class {
   constructor(notificationPort) {
     this.notificationPort = notificationPort;
@@ -349,6 +359,7 @@ var SendNotificationUseCase = class {
   }
 };
 export {
+  AuctionsNotification,
   automatic_exports as AutomaticModule,
   notification_exports as NotificationModule,
   user_exports as UserModule,

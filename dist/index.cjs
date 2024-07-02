@@ -20,6 +20,7 @@ var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: tru
 // src/index.ts
 var src_exports = {};
 __export(src_exports, {
+  AuctionsNotification: () => AuctionsNotification,
   AutomaticModule: () => automatic_exports,
   NotificationModule: () => notification_exports,
   UserModule: () => user_exports,
@@ -29,6 +30,22 @@ module.exports = __toCommonJS(src_exports);
 
 // src/core/entities/auction.ts
 var auctionStatuses = ["OPEN", "CLOSED"];
+
+// src/core/entities/auctions-notification.ts
+var AuctionsNotification = class {
+  constructor(recipient, subject, body) {
+    this.recipient = recipient;
+    this.subject = subject;
+    this.body = body;
+  }
+  get() {
+    return {
+      recipient: this.recipient,
+      subject: this.subject,
+      body: this.body
+    };
+  }
+};
 
 // src/modules/user/index.ts
 var user_exports = {};
@@ -340,16 +357,10 @@ var ProcessAuctionsUseCase = class {
   async execute() {
     return await useCaseHandler(async () => {
       const expiredAuctions = await this.port.getExpiredAuctions();
-      const closePromises = expiredAuctions.map((a) => this.closeAuction(a));
+      const closePromises = expiredAuctions.map((a) => this.port.closeAuction(a));
       await Promise.all(closePromises);
       return (0, import_either.right)(expiredAuctions.length);
     });
-  }
-  async closeAuction(auction) {
-    const { id, title, seller, highestBid } = auction;
-    await this.port.closeAuction(id);
-    if (highestBid.amount === 0) {
-    }
   }
 };
 
@@ -359,7 +370,7 @@ __export(notification_exports, {
   SendNotificationUseCase: () => SendNotificationUseCase
 });
 
-// src/modules/notification/use-cases/send-notification/send-notification.use.case.ts
+// src/modules/notification/send-notification/send-notification.use.case.ts
 var SendNotificationUseCase = class {
   constructor(notificationPort) {
     this.notificationPort = notificationPort;
@@ -373,6 +384,7 @@ var SendNotificationUseCase = class {
 };
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
+  AuctionsNotification,
   AutomaticModule,
   NotificationModule,
   UserModule,
