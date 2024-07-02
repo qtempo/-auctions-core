@@ -1,1 +1,1 @@
-export * from './use-cases/send-notification'
+export * from './send-notification'

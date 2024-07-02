@@ -1,6 +1,6 @@
-import { Auction, AuctionID } from '@core/entities'
+import { Auction } from '@core/entities'
 
 export interface ProcessAuctionsPort {
   getExpiredAuctions(): Promise<Auction[]>
-  closeAuction(id: AuctionID): Promise<void>
+  closeAuction(auction: Auction): Promise<void>
 }
