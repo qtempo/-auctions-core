@@ -1,0 +1,43 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: CI
+
+on:
+  pull_request:
+    branches: ["main"]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [20.x]
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "yarn"
+          cache-dependency-path: yarn.lock
+      - run: yarn install --frozen-lockfile
+      - run: yarn lint
+      - run: yarn test
+      - run: yarn build
+
+      - name: Commit and push changes
+        env:
+          token: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "<>"
+          git pull --no-rebase --allow-unrelated-histories origin ${{ github.event.pull_request.head.ref }}
+          git add -f dist
+          git commit -m "apply automated build"
+          git push origin -f HEAD:${{ github.event.pull_request.head.ref }}
