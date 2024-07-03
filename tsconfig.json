@@ -21,24 +21,24 @@
       "@core/*": [
         "./src/core/*"
       ],
-      "@user-module": [
-        "./src/modules/user"
+      "@user-module/repositories": [
+        "./src/user/repositories"
       ],
-      "@user-module/*": [
-        "./src/modules/user/*"
+      "@user-module/use-cases": [
+        "./src/user/use-cases"
       ],
-      "@automatic-module": [
-        "./src/modules/automatic"
+      "@user-module/use-cases/*": [
+        "./src/user/use-cases/*"
       ],
-      "@automatic-module/*": [
-        "./src/modules/automatic/*"
+      "@automatic-module/repositories": [
+        "./src/automatic/repositories"
       ],
-      "@notification-module": [
-        "./src/modules/notification"
+      "@automatic-module/use-cases": [
+        "./src/automatic/use-cases"
       ],
-      "@notification-module/*": [
-        "./src/modules/notification/*"
-      ],
+      "@notification-module/use-cases": [
+        "./src/notification/use-cases"
+      ]
     },
   },
   "include": [

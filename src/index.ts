@@ -1,4 +1,8 @@
 export * from '@core/entities'
-export * as UserModule from '@user-module'
-export * as AutomaticModule from '@automatic-module'
-export * as NotificationModule from '@notification-module'
+
+export * as UserUseCases from '@user-module/use-cases'
+export * as AutomaticUseCases from '@automatic-module/use-cases'
+export * as NotificationUseCases from '@notification-module/use-cases'
+
+export { UserAuctionsRepository, UploadAuctionPictureRepository } from '@user-module/repositories'
+export { AutomaticProcessAuctionsRepository } from '@automatic-module/repositories'
