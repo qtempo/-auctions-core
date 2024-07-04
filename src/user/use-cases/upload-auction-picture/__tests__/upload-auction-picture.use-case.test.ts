@@ -23,7 +23,7 @@ describe('upload-auction-picture.use-case', () => {
   let testPictureBase64 = ''
 
   before(async () => {
-    testPictureBase64 = await fs.readFile(`${import.meta.dirname}/signal.jpg`, { encoding: 'base64' })
+    testPictureBase64 = await fs.readFile(`${import.meta.dirname ?? __dirname}/signal.jpg`, { encoding: 'base64' })
   })
 
   it('should fail on auction id verification', async () => {
