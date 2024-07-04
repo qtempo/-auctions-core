@@ -9,3 +9,4 @@ Domain logic for the Auctions application
 
 ##### todo
 - [ ] pre-commit step do not reject commit if some tests failed
+- [ ] ci
