@@ -29,9 +29,8 @@
         "**/*.test.ts"
       ],
       "parameters": [
-        "--experimental-specifier-resolution=node",
         "--import",
-        "${workspaceFolder}/utils/test-runner/register.js",
+        "tsx"
       ]
     }
   ],
