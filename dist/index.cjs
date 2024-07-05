@@ -27,7 +27,9 @@ __export(src_exports, {
   UploadAuctionPictureRepository: () => UploadAuctionPictureRepository,
   UserAuctionsRepository: () => UserAuctionsRepository,
   UserUseCases: () => use_cases_exports,
-  auctionStatuses: () => auctionStatuses
+  auctionStatuses: () => auctionStatuses,
+  left: () => import_either.left,
+  right: () => import_either.right
 });
 module.exports = __toCommonJS(src_exports);
 
@@ -49,6 +51,9 @@ var AuctionsNotification = class {
     };
   }
 };
+
+// src/core/result.ts
+var import_either = require("@sweet-monads/either");
 
 // src/user/use-cases/index.ts
 var use_cases_exports = {};
@@ -77,9 +82,6 @@ var CreateAuctionError = class _CreateAuctionError extends Error {
     return new _CreateAuctionError(`auction's "seller" not provided`);
   }
 };
-
-// src/core/result.ts
-var import_either = require("@sweet-monads/either");
 
 // src/core/auctions.error.ts
 var AuctionsError = class extends Error {
@@ -398,5 +400,7 @@ var AutomaticProcessAuctionsRepository = class {
   UploadAuctionPictureRepository,
   UserAuctionsRepository,
   UserUseCases,
-  auctionStatuses
+  auctionStatuses,
+  left,
+  right
 });

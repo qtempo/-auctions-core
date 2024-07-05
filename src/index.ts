@@ -1,4 +1,5 @@
 export * from '@core/entities'
+export * from '@core/result'
 
 export * as UserUseCases from '@user-module/use-cases'
 export * as AutomaticUseCases from '@automatic-module/use-cases'

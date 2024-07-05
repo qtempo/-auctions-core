@@ -1,5 +1,4 @@
 {
-  "window.title": "${workspaceFolder}",
   "prettier.enable": false,
   "editor.formatOnSave": false,
   "editor.codeActionsOnSave": {

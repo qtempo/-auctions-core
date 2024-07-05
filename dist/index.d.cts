@@ -1,5 +1,6 @@
 import { UUID } from 'node:crypto';
 import { Either } from '@sweet-monads/either';
+export { left, right } from '@sweet-monads/either';
 
 declare const auctionStatuses: readonly ["OPEN", "CLOSED"];
 type AuctionID = UUID;
@@ -226,4 +227,4 @@ declare abstract class AutomaticProcessAuctionsRepository implements ProcessAuct
     private doEvent;
 }
 
-export { type Auction, type AuctionBidderEmail, type AuctionID, type AuctionSellerEmail, AuctionsNotification, AutomaticProcessAuctionsRepository, index$1 as AutomaticUseCases, index as NotificationUseCases, UploadAuctionPictureRepository, UserAuctionsRepository, index$2 as UserUseCases, auctionStatuses };
+export { type Auction, type AuctionBidderEmail, type AuctionID, type AuctionSellerEmail, AuctionsNotification, AutomaticProcessAuctionsRepository, index$1 as AutomaticUseCases, index as NotificationUseCases, type Result, UploadAuctionPictureRepository, UserAuctionsRepository, index$2 as UserUseCases, auctionStatuses };
