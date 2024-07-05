@@ -40,6 +40,29 @@ declare class AuctionsNotification implements DomainEvent {
     };
 }
 
+declare class CreateAuctionError extends Error {
+    name: "CreateAuctionError";
+    constructor(message: string);
+    static titleValidationFail(): CreateAuctionError;
+    static sellerValidationFail(): CreateAuctionError;
+}
+
+type CreateAuctionRequest = Pick<Auction, 'title' | 'seller'>;
+
+interface CreateAuctionPort {
+    create(request: CreateAuctionRequest): Promise<Result<Error, Auction>> | Result<Error, Auction>;
+}
+
+interface UseCase<TRequest, TResponse> {
+    execute(request?: TRequest): Promise<Result<Error, TResponse>> | Result<Error, TResponse>;
+}
+
+declare class CreateAuctionUseCase implements UseCase<CreateAuctionRequest, Auction> {
+    private readonly createAuctionPort;
+    constructor(createAuctionPort: CreateAuctionPort);
+    execute(request: CreateAuctionRequest): Promise<Result<Error, Auction>>;
+}
+
 declare class AuctionNotFoundError extends Error {
     name: "AuctionNotFoundError";
     constructor(id: AuctionID);
@@ -50,10 +73,6 @@ interface Query<E extends Error, TRequest, TResponse> {
 }
 
 interface GetAuctionPort extends Query<Error, AuctionID, Auction> {
-}
-
-interface UseCase<TRequest, TResponse> {
-    execute(request?: TRequest): Promise<Result<Error, TResponse>> | Result<Error, TResponse>;
 }
 
 declare class GetAuctionUseCase implements UseCase<AuctionID, Auction> {
@@ -119,6 +138,12 @@ type index$2_AuctionPlaceBidError = AuctionPlaceBidError;
 declare const index$2_AuctionPlaceBidError: typeof AuctionPlaceBidError;
 type index$2_AuctionPlaceBidPort = AuctionPlaceBidPort;
 type index$2_AuctionPlaceBidRequest = AuctionPlaceBidRequest;
+type index$2_CreateAuctionError = CreateAuctionError;
+declare const index$2_CreateAuctionError: typeof CreateAuctionError;
+type index$2_CreateAuctionPort = CreateAuctionPort;
+type index$2_CreateAuctionRequest = CreateAuctionRequest;
+type index$2_CreateAuctionUseCase = CreateAuctionUseCase;
+declare const index$2_CreateAuctionUseCase: typeof CreateAuctionUseCase;
 type index$2_GetAuctionPort = GetAuctionPort;
 type index$2_GetAuctionUseCase = GetAuctionUseCase;
 declare const index$2_GetAuctionUseCase: typeof GetAuctionUseCase;
@@ -135,7 +160,7 @@ type index$2_UploadAuctionPictureServicePort = UploadAuctionPictureServicePort;
 type index$2_UploadAuctionPictureUseCase = UploadAuctionPictureUseCase;
 declare const index$2_UploadAuctionPictureUseCase: typeof UploadAuctionPictureUseCase;
 declare namespace index$2 {
-  export { index$2_AuctionNotFoundError as AuctionNotFoundError, index$2_AuctionPlaceBidError as AuctionPlaceBidError, type index$2_AuctionPlaceBidPort as AuctionPlaceBidPort, type index$2_AuctionPlaceBidRequest as AuctionPlaceBidRequest, type index$2_GetAuctionPort as GetAuctionPort, index$2_GetAuctionUseCase as GetAuctionUseCase, type index$2_GetAuctionsByStatusPort as GetAuctionsByStatusPort, index$2_GetAuctionsByStatusUseCase as GetAuctionsByStatusUseCase, index$2_PlaceBidUseCase as PlaceBidUseCase, type index$2_SetAuctionPictureUrlPort as SetAuctionPictureUrlPort, index$2_UploadAuctionPictureError as UploadAuctionPictureError, type index$2_UploadAuctionPictureRequest as UploadAuctionPictureRequest, type index$2_UploadAuctionPictureServicePort as UploadAuctionPictureServicePort, index$2_UploadAuctionPictureUseCase as UploadAuctionPictureUseCase };
+  export { index$2_AuctionNotFoundError as AuctionNotFoundError, index$2_AuctionPlaceBidError as AuctionPlaceBidError, type index$2_AuctionPlaceBidPort as AuctionPlaceBidPort, type index$2_AuctionPlaceBidRequest as AuctionPlaceBidRequest, index$2_CreateAuctionError as CreateAuctionError, type index$2_CreateAuctionPort as CreateAuctionPort, type index$2_CreateAuctionRequest as CreateAuctionRequest, index$2_CreateAuctionUseCase as CreateAuctionUseCase, type index$2_GetAuctionPort as GetAuctionPort, index$2_GetAuctionUseCase as GetAuctionUseCase, type index$2_GetAuctionsByStatusPort as GetAuctionsByStatusPort, index$2_GetAuctionsByStatusUseCase as GetAuctionsByStatusUseCase, index$2_PlaceBidUseCase as PlaceBidUseCase, type index$2_SetAuctionPictureUrlPort as SetAuctionPictureUrlPort, index$2_UploadAuctionPictureError as UploadAuctionPictureError, type index$2_UploadAuctionPictureRequest as UploadAuctionPictureRequest, type index$2_UploadAuctionPictureServicePort as UploadAuctionPictureServicePort, index$2_UploadAuctionPictureUseCase as UploadAuctionPictureUseCase };
 }
 
 interface ProcessAuctionsPort {
@@ -171,19 +196,6 @@ type index_SendNotificationUseCase = SendNotificationUseCase;
 declare const index_SendNotificationUseCase: typeof SendNotificationUseCase;
 declare namespace index {
   export { type index_SendNotificationPort as SendNotificationPort, index_SendNotificationUseCase as SendNotificationUseCase };
-}
-
-declare class CreateAuctionError extends Error {
-    name: "CreateAuctionError";
-    constructor(message: string);
-    static titleValidationFail(): CreateAuctionError;
-    static sellerValidationFail(): CreateAuctionError;
-}
-
-type CreateAuctionRequest = Pick<Auction, 'title' | 'seller'>;
-
-interface CreateAuctionPort {
-    create(request: CreateAuctionRequest): Promise<Result<Error, Auction>> | Result<Error, Auction>;
 }
 
 declare abstract class UserAuctionsRepository implements CreateAuctionPort, GetAuctionPort, GetAuctionsByStatusPort, AuctionPlaceBidPort, SetAuctionPictureUrlPort {

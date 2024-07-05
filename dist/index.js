@@ -28,6 +28,8 @@ var use_cases_exports = {};
 __export(use_cases_exports, {
   AuctionNotFoundError: () => AuctionNotFoundError,
   AuctionPlaceBidError: () => AuctionPlaceBidError,
+  CreateAuctionError: () => CreateAuctionError,
+  CreateAuctionUseCase: () => CreateAuctionUseCase,
   GetAuctionUseCase: () => GetAuctionUseCase,
   GetAuctionsByStatusUseCase: () => GetAuctionsByStatusUseCase,
   PlaceBidUseCase: () => PlaceBidUseCase,
@@ -35,21 +37,27 @@ __export(use_cases_exports, {
   UploadAuctionPictureUseCase: () => UploadAuctionPictureUseCase
 });
 
-// src/user/use-cases/get-auction/auction-not-found.error.ts
-var AuctionNotFoundError = class extends Error {
-  name = "AuctionNotFoundError";
-  constructor(id) {
-    super(`auction with id: ${id} doesn't exist`);
+// src/user/use-cases/create-auction/create-auction.error.ts
+var CreateAuctionError = class _CreateAuctionError extends Error {
+  name = "CreateAuctionError";
+  constructor(message) {
+    super(message);
+  }
+  static titleValidationFail() {
+    return new _CreateAuctionError(`auction's "title" not provided`);
+  }
+  static sellerValidationFail() {
+    return new _CreateAuctionError(`auction's "seller" not provided`);
   }
 };
+
+// src/core/result.ts
+import { left, right } from "@sweet-monads/either";
 
 // src/core/auctions.error.ts
 var AuctionsError = class extends Error {
   name = "AuctionsError";
 };
-
-// src/core/result.ts
-import { left, right } from "@sweet-monads/either";
 
 // src/core/base.use-case.ts
 var useCaseHandler = async (fn) => {
@@ -58,6 +66,30 @@ var useCaseHandler = async (fn) => {
     return result.isLeft() ? left(result.value) : right(result.value);
   } catch (error) {
     return left(new AuctionsError(`Unexpected error occur: ${error["message"]}`));
+  }
+};
+
+// src/user/use-cases/create-auction/create-auction.use-case.ts
+var CreateAuctionUseCase = class {
+  constructor(createAuctionPort) {
+    this.createAuctionPort = createAuctionPort;
+  }
+  async execute(request) {
+    return await useCaseHandler(async () => {
+      const createResult = await this.createAuctionPort.create(request);
+      if (createResult.isLeft()) {
+        return left(createResult.value);
+      }
+      return right(createResult.value);
+    });
+  }
+};
+
+// src/user/use-cases/get-auction/auction-not-found.error.ts
+var AuctionNotFoundError = class extends Error {
+  name = "AuctionNotFoundError";
+  constructor(id) {
+    super(`auction with id: ${id} doesn't exist`);
   }
 };
 
@@ -184,22 +216,6 @@ var SendNotificationUseCase = class {
 
 // src/user/repositories/user-auctions.repository.ts
 import { randomUUID } from "crypto";
-
-// src/user/use-cases/create-auction/create-auction.error.ts
-var CreateAuctionError = class _CreateAuctionError extends Error {
-  name = "CreateAuctionError";
-  constructor(message) {
-    super(message);
-  }
-  static titleValidationFail() {
-    return new _CreateAuctionError(`auction's "title" not provided`);
-  }
-  static sellerValidationFail() {
-    return new _CreateAuctionError(`auction's "seller" not provided`);
-  }
-};
-
-// src/user/repositories/user-auctions.repository.ts
 var UserAuctionsRepository = class {
   constructor(_auction) {
     this._auction = _auction;
