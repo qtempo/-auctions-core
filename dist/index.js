@@ -26,6 +26,31 @@ var AuctionsNotification = class {
 // src/core/result.ts
 import { left, right } from "@sweet-monads/either";
 
+// src/core/auctions.error.ts
+var AuctionsError = class extends Error {
+  name = "AuctionsError";
+};
+
+// src/core/domain.events.ts
+var DomainEvents = class _DomainEvents {
+  static dispatchers = /* @__PURE__ */ new Map();
+  static register(name, dispatcher) {
+    if (!name || !dispatcher) {
+      return left(new AuctionsError("Could' register an event"));
+    }
+    _DomainEvents.dispatchers.set(name, dispatcher);
+    return right(void 0);
+  }
+  static async dispatch(name, args) {
+    const dispatcher = _DomainEvents.dispatchers.get(name);
+    if (!dispatcher) {
+      return left(new AuctionsError(`Dispatcher not found for the event: ${name}`));
+    }
+    await dispatcher(args);
+    return right(void 0);
+  }
+};
+
 // src/user/use-cases/index.ts
 var use_cases_exports = {};
 __export(use_cases_exports, {
@@ -52,11 +77,6 @@ var CreateAuctionError = class _CreateAuctionError extends Error {
   static sellerValidationFail() {
     return new _CreateAuctionError(`auction's "seller" not provided`);
   }
-};
-
-// src/core/auctions.error.ts
-var AuctionsError = class extends Error {
-  name = "AuctionsError";
 };
 
 // src/core/base.use-case.ts
@@ -310,26 +330,6 @@ var UploadAuctionPictureRepository = class {
   }
 };
 
-// src/core/domain.events.ts
-var DomainEvents = class _DomainEvents {
-  static dispatchers = /* @__PURE__ */ new Map();
-  static register(name, dispatcher) {
-    if (!name || !dispatcher) {
-      return left(new AuctionsError("Could' register an event"));
-    }
-    _DomainEvents.dispatchers.set(name, dispatcher);
-    return right(void 0);
-  }
-  static async dispatch(name, args) {
-    const dispatcher = _DomainEvents.dispatchers.get(name);
-    if (!dispatcher) {
-      return left(new AuctionsError(`Dispatcher not found for the event: ${name}`));
-    }
-    await dispatcher(args);
-    return right(void 0);
-  }
-};
-
 // src/automatic/repositories/automatic-process-auctions.repository.ts
 var AutomaticProcessAuctionsRepository = class {
   async closeAuction(auction) {
@@ -366,6 +366,7 @@ export {
   AuctionsNotification,
   AutomaticProcessAuctionsRepository,
   use_cases_exports2 as AutomaticUseCases,
+  DomainEvents,
   use_cases_exports3 as NotificationUseCases,
   UploadAuctionPictureRepository,
   UserAuctionsRepository,

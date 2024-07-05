@@ -23,6 +23,7 @@ __export(src_exports, {
   AuctionsNotification: () => AuctionsNotification,
   AutomaticProcessAuctionsRepository: () => AutomaticProcessAuctionsRepository,
   AutomaticUseCases: () => use_cases_exports2,
+  DomainEvents: () => DomainEvents,
   NotificationUseCases: () => use_cases_exports3,
   UploadAuctionPictureRepository: () => UploadAuctionPictureRepository,
   UserAuctionsRepository: () => UserAuctionsRepository,
@@ -55,6 +56,31 @@ var AuctionsNotification = class {
 // src/core/result.ts
 var import_either = require("@sweet-monads/either");
 
+// src/core/auctions.error.ts
+var AuctionsError = class extends Error {
+  name = "AuctionsError";
+};
+
+// src/core/domain.events.ts
+var DomainEvents = class _DomainEvents {
+  static dispatchers = /* @__PURE__ */ new Map();
+  static register(name, dispatcher) {
+    if (!name || !dispatcher) {
+      return (0, import_either.left)(new AuctionsError("Could' register an event"));
+    }
+    _DomainEvents.dispatchers.set(name, dispatcher);
+    return (0, import_either.right)(void 0);
+  }
+  static async dispatch(name, args) {
+    const dispatcher = _DomainEvents.dispatchers.get(name);
+    if (!dispatcher) {
+      return (0, import_either.left)(new AuctionsError(`Dispatcher not found for the event: ${name}`));
+    }
+    await dispatcher(args);
+    return (0, import_either.right)(void 0);
+  }
+};
+
 // src/user/use-cases/index.ts
 var use_cases_exports = {};
 __export(use_cases_exports, {
@@ -81,11 +107,6 @@ var CreateAuctionError = class _CreateAuctionError extends Error {
   static sellerValidationFail() {
     return new _CreateAuctionError(`auction's "seller" not provided`);
   }
-};
-
-// src/core/auctions.error.ts
-var AuctionsError = class extends Error {
-  name = "AuctionsError";
 };
 
 // src/core/base.use-case.ts
@@ -339,26 +360,6 @@ var UploadAuctionPictureRepository = class {
   }
 };
 
-// src/core/domain.events.ts
-var DomainEvents = class _DomainEvents {
-  static dispatchers = /* @__PURE__ */ new Map();
-  static register(name, dispatcher) {
-    if (!name || !dispatcher) {
-      return (0, import_either.left)(new AuctionsError("Could' register an event"));
-    }
-    _DomainEvents.dispatchers.set(name, dispatcher);
-    return (0, import_either.right)(void 0);
-  }
-  static async dispatch(name, args) {
-    const dispatcher = _DomainEvents.dispatchers.get(name);
-    if (!dispatcher) {
-      return (0, import_either.left)(new AuctionsError(`Dispatcher not found for the event: ${name}`));
-    }
-    await dispatcher(args);
-    return (0, import_either.right)(void 0);
-  }
-};
-
 // src/automatic/repositories/automatic-process-auctions.repository.ts
 var AutomaticProcessAuctionsRepository = class {
   async closeAuction(auction) {
@@ -396,6 +397,7 @@ var AutomaticProcessAuctionsRepository = class {
   AuctionsNotification,
   AutomaticProcessAuctionsRepository,
   AutomaticUseCases,
+  DomainEvents,
   NotificationUseCases,
   UploadAuctionPictureRepository,
   UserAuctionsRepository,
