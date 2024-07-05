@@ -1,7 +1,6 @@
-import { DomainEvent } from '@core/domain.events'
 import { AuctionBidderEmail, AuctionSellerEmail } from './auction'
 
-export class AuctionsNotification implements DomainEvent {
+export class AuctionsNotification {
   constructor(
     private readonly recipient: AuctionSellerEmail | AuctionBidderEmail,
     private readonly subject: string,

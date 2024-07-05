@@ -1,9 +1,8 @@
 import { AuctionsError } from './auctions.error'
 import { Result, left, right } from './result'
 
-export interface DomainEvent { }
-
-type DispatchHandler = (args: DomainEvent) => Promise<void> | void;; // todo: wft? o_O
+type Args = { [name: string]: string }
+type DispatchHandler = (args: Args) => Promise<void> | void;; // todo: wft? o_O
 
 export class DomainEvents {
   private static dispatchers = new Map<string, DispatchHandler>()
@@ -16,7 +15,7 @@ export class DomainEvents {
     return right(void 0)
   }
 
-  public static async dispatch(name: string, args: DomainEvent): Promise<Result<AuctionsError, void>> {
+  public static async dispatch(name: string, args: Args): Promise<Result<AuctionsError, void>> {
     const dispatcher = DomainEvents.dispatchers.get(name)
     if (!dispatcher) {
       return left(new AuctionsError(`Dispatcher not found for the event: ${name}`))

@@ -20,22 +20,7 @@ interface Auction {
     };
 }
 
-declare class AuctionsError extends Error {
-    name: "AuctionsError";
-}
-
-type Result<E extends Error, T> = Either<E, T>;
-
-interface DomainEvent {
-}
-type DispatchHandler = (args: DomainEvent) => Promise<void> | void;
-declare class DomainEvents {
-    private static dispatchers;
-    static register(name: string, dispatcher: DispatchHandler): Result<AuctionsError, void>;
-    static dispatch(name: string, args: DomainEvent): Promise<Result<AuctionsError, void>>;
-}
-
-declare class AuctionsNotification implements DomainEvent {
+declare class AuctionsNotification {
     private readonly recipient;
     private readonly subject;
     private readonly body;
@@ -45,6 +30,22 @@ declare class AuctionsNotification implements DomainEvent {
         subject: string;
         body: string;
     };
+}
+
+type Result<E extends Error, T> = Either<E, T>;
+
+declare class AuctionsError extends Error {
+    name: "AuctionsError";
+}
+
+type Args = {
+    [name: string]: string;
+};
+type DispatchHandler = (args: Args) => Promise<void> | void;
+declare class DomainEvents {
+    private static dispatchers;
+    static register(name: string, dispatcher: DispatchHandler): Result<AuctionsError, void>;
+    static dispatch(name: string, args: Args): Promise<Result<AuctionsError, void>>;
 }
 
 declare class CreateAuctionError extends Error {
@@ -233,4 +234,4 @@ declare abstract class AutomaticProcessAuctionsRepository implements ProcessAuct
     private doEvent;
 }
 
-export { type Auction, type AuctionBidderEmail, type AuctionID, type AuctionSellerEmail, AuctionsNotification, AutomaticProcessAuctionsRepository, index$1 as AutomaticUseCases, type DomainEvent, DomainEvents, index as NotificationUseCases, type Result, UploadAuctionPictureRepository, UserAuctionsRepository, index$2 as UserUseCases, auctionStatuses };
+export { type Auction, type AuctionBidderEmail, type AuctionID, type AuctionSellerEmail, AuctionsNotification, AutomaticProcessAuctionsRepository, index$1 as AutomaticUseCases, DomainEvents, index as NotificationUseCases, type Result, UploadAuctionPictureRepository, UserAuctionsRepository, index$2 as UserUseCases, auctionStatuses };
