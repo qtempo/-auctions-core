@@ -1,6 +1,6 @@
 {
   "name": "auctions-core",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Domain logic for the Auctions application",
   "author": "https://github.com/hyperactivepuss",
   "repository": {
