@@ -1,6 +1,6 @@
 {
   "name": "auctions-core",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Domain logic for the Auctions application",
   "author": "https://github.com/hyperactivepuss",
   "repository": {
@@ -12,7 +12,7 @@
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "postinstall": "husky",
+    "prepare": "husky",
     "build": "tsup --dts",
     "lint": "eslint .",
     "test": "bash ./utils/test-runner/run.sh",
@@ -25,7 +25,6 @@
     "c8": "^10.1.2",
     "eslint": "^9.6.0",
     "husky": "^9.0.11",
-    "postinstall": "^0.10.3",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "tsup": "^8.1.0",
